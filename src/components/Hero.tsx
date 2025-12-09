@@ -60,22 +60,22 @@ export const Hero = () => {
           </div>
 
           {/* Trust Indicators */}
-          <div className="flex flex-wrap items-center gap-8 mt-12 pt-8 border-t border-white/20 animate-fade-up [animation-delay:0.4s]">
+          <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-4 sm:gap-6 md:gap-8 mt-8 md:mt-12 pt-6 md:pt-8 border-t border-white/20 animate-fade-up [animation-delay:0.4s]">
             <div className="text-white/80">
-              <div className="text-2xl font-bold text-white">4.9★</div>
-              <div className="text-sm">2,000+ Reviews</div>
+              <div className="text-xl md:text-2xl font-bold text-white">4.9★</div>
+              <div className="text-xs md:text-sm">2,000+ Reviews</div>
             </div>
             <div className="text-white/80">
-              <div className="text-2xl font-bold text-white">10 Year</div>
-              <div className="text-sm">Warranty</div>
+              <div className="text-xl md:text-2xl font-bold text-white">10 Year</div>
+              <div className="text-xs md:text-sm">Warranty</div>
             </div>
             <div className="text-white/80">
-              <div className="text-2xl font-bold text-white">30 Day</div>
-              <div className="text-sm">Free Returns</div>
+              <div className="text-xl md:text-2xl font-bold text-white">30 Day</div>
+              <div className="text-xs md:text-sm">Free Returns</div>
             </div>
             <div className="text-white/80">
-              <div className="text-2xl font-bold text-white">Free</div>
-              <div className="text-sm">AU Shipping</div>
+              <div className="text-xl md:text-2xl font-bold text-white">Free</div>
+              <div className="text-xs md:text-sm">AU Shipping</div>
             </div>
           </div>
         </div>

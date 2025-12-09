@@ -7,6 +7,18 @@ All colors MUST be HSL. Navy primary, Gold accent, Cream text.
 */
 
 @layer base {
+  * {
+    @apply border-border;
+  }
+  
+  html {
+    @apply overflow-x-hidden;
+  }
+  
+  body {
+    @apply bg-background text-foreground overflow-x-hidden;
+  }
+  
   :root {
     /* Brand Colors - Extracted from ezhomes logo */
     --brand-navy: 210 47% 15%;        /* Deep navy from logo background */

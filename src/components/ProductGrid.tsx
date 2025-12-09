@@ -25,10 +25,10 @@ export const ProductGrid = () => {
   }, []);
 
   return (
-    <section id="products" className="py-24 lg:py-32 bg-background">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="products" className="py-16 md:py-24 lg:py-32 bg-background overflow-hidden">
+      <div className="container mx-auto px-6 sm:px-8 lg:px-12 max-w-7xl">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-16">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-12 md:mb-16">
           <div>
             <p className="text-sm font-semibold text-accent tracking-widest uppercase mb-4">
               Our Collection
@@ -47,7 +47,7 @@ export const ProductGrid = () => {
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
           {loading ? (
             // Loading skeleton
             Array.from({ length: 6 }).map((_, i) => (
