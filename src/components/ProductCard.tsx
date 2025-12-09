@@ -11,6 +11,7 @@ interface ProductCardProps {
 export const ProductCard = ({ product }: ProductCardProps) => {
   const { addToCart } = useCart();
   const [hoverIndex, setHoverIndex] = useState(0);
+  const [selectedVariantId, setSelectedVariantId] = useState(product.id);
   const cycleRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -26,7 +27,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const images = product.images.length > 0 ? product.images : [product.externalImage || ''];
 
   return (
-    <Link to={`/product/${product.id}`} className="group cursor-pointer block active:scale-[0.98] transition-transform">
+    <div className="group cursor-pointer block active:scale-[0.98] transition-transform">{/* Removed Link wrapper */}
       {/* Image Container */}
       <div
         className="relative aspect-[3/4] md:aspect-[4/5] bg-muted mb-4 md:mb-6 overflow-hidden rounded-lg md:rounded-none"
@@ -74,11 +75,11 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         )}
 
         {/* Shop Now Button - Shows on hover */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+        <Link to={`/product/${selectedVariantId}`} className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
           <span className="block w-full bg-primary text-primary-foreground py-3 font-semibold text-center hover:bg-primary/90 transition-colors rounded">
             Shop Now
           </span>
-        </div>
+        </Link>
       </div>
 
       {/* Product Info */}
@@ -89,7 +90,15 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             {product.colorVariants.slice(0, 6).map((variant, index) => (
               <button
                 key={index}
-                className="w-5 h-5 rounded-full border-2 border-transparent hover:border-primary transition-colors"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedVariantId(variant.productId);
+                }}
+                className={`w-5 h-5 rounded-full border-2 transition-all ${
+                  selectedVariantId === variant.productId 
+                    ? 'border-primary ring-2 ring-primary/30' 
+                    : 'border-transparent hover:border-primary'
+                }`}
                 style={{ backgroundColor: variant.colorCode }}
                 title={variant.color}
               />
@@ -101,9 +110,11 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         )}
 
         {/* Title */}
-        <h3 className="text-base md:text-lg font-semibold text-primary mb-1.5 md:mb-2 group-hover:text-accent transition-colors line-clamp-2 leading-snug">
-          {product.title}
-        </h3>
+        <Link to={`/product/${selectedVariantId}`}>
+          <h3 className="text-base md:text-lg font-semibold text-primary mb-1.5 md:mb-2 group-hover:text-accent transition-colors line-clamp-2 leading-snug">
+            {product.title}
+          </h3>
+        </Link>
 
         {/* Rating */}
         <div className="flex items-center gap-1.5 md:gap-2 mb-2 md:mb-3">
@@ -136,11 +147,11 @@ export const ProductCard = ({ product }: ProductCardProps) => {
               <span className="text-xs md:text-sm font-semibold text-destructive">
                 Save ${(product.compareAtPrice! - product.price).toLocaleString()}
               </span>
-            )}
-          </div>
-          <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
-            <span className="text-xl md:text-2xl font-bold text-primary">
-              ${product.price.toLocaleString()}
+        </div>
+      </div>
+    </div>
+  );
+};            ${product.price.toLocaleString()}
             </span>
             <span className="text-xs md:text-sm text-muted-foreground">
               or ${Math.round(product.price / 4).toLocaleString()}/wk
