@@ -293,4 +293,4 @@ Replace the logo text in `Header.tsx`:
 
 ---
 
-**ezhomes Theme v1.0** | Built with ❤️ for Australian furniture retailers | Optimized for Shopify Online Store 2.0
+**ezhomes Theme v1.0** | Built with ❤️ for Australian furniture retailers | Optimized for Shopify Online Store 2.0# ezhomes
