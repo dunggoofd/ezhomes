@@ -1,6 +1,7 @@
 import { Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import type { Product } from '@/data/products';
+import { products } from '@/data/products';
 import { useCart } from '@/context/CartContext';
 import { useEffect, useRef, useState } from 'react';
 
@@ -12,6 +13,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const { addToCart } = useCart();
   const [hoverIndex, setHoverIndex] = useState(0);
   const [selectedVariantId, setSelectedVariantId] = useState(product.id);
+  const [currentImages, setCurrentImages] = useState(product.images.length > 0 ? product.images : [product.externalImage || '']);
   const cycleRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -19,12 +21,32 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       if (cycleRef.current) window.clearInterval(cycleRef.current);
     };
   }, []);
+  
+  // Update images when variant changes
+  useEffect(() => {
+    if (selectedVariantId === product.id) {
+      // Show current product images
+      setCurrentImages(product.images.length > 0 ? product.images : [product.externalImage || '']);
+    } else {
+      // Find the selected variant product from all products
+      const variantProduct = products.find(p => p.id === selectedVariantId);
+      if (variantProduct) {
+        // Use the variant product's images
+        setCurrentImages(variantProduct.images.length > 0 ? variantProduct.images : [variantProduct.externalImage || '']);
+      } else {
+        // Fallback to current product images
+        setCurrentImages(product.images.length > 0 ? product.images : [product.externalImage || '']);
+      }
+    }
+    setHoverIndex(0); // Reset hover when variant changes
+  }, [selectedVariantId, product]);
+  
   const discount = product.compareAtPrice 
     ? Math.round((1 - product.price / product.compareAtPrice) * 100)
     : 0;
 
-  // Use all available images
-  const images = product.images.length > 0 ? product.images : [product.externalImage || ''];
+  // Use current images for display
+  const images = currentImages;
 
   return (
     <div className="group cursor-pointer block active:scale-[0.98] transition-transform">{/* Removed Link wrapper */}
@@ -42,9 +64,10 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       >
         {/* Image with zoom effect */}
         <img
-          src={images[hoverIndex]}
+          src={currentImages[hoverIndex]}
           alt={product.title}
-          className="w-full h-full object-cover transition-opacity duration-300"
+          className="w-full h-full object-cover transition-all duration-500"
+          key={selectedVariantId} // Force re-render on variant change
         />
         
         {/* Badges */}
