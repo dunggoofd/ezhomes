@@ -1,0 +1,203 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ezhomes Design System - Based on Logo Brand Palette 
+All colors MUST be HSL. Navy primary, Gold accent, Cream text.
+*/
+
+@layer base {
+  :root {
+    /* Brand Colors - Extracted from ezhomes logo */
+    --brand-navy: 210 47% 15%;        /* Deep navy from logo background */
+    --brand-gold: 45 85% 65%;         /* Warm gold from star and accents */
+    --brand-cream: 40 25% 85%;        /* Cream from logo text */
+    --brand-sand: 35 20% 75%;         /* Lighter sand tone */
+    
+    /* Semantic Design Tokens */
+    --background: 0 0% 100%;
+    --foreground: 210 47% 15%;        /* Brand navy for text */
+
+    --card: 0 0% 100%;
+    --card-foreground: 210 47% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 47% 15%;
+
+    --primary: 210 47% 15%;           /* Brand navy */
+    --primary-foreground: 40 25% 85%; /* Brand cream */
+
+    --secondary: 35 20% 75%;          /* Brand sand */
+    --secondary-foreground: 210 47% 15%;
+
+    --muted: 40 15% 95%;
+    --muted-foreground: 210 20% 45%;
+
+    --accent: 45 85% 65%;             /* Brand gold */
+    --accent-foreground: 210 47% 15%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 35 15% 90%;
+    --input: 35 15% 90%;
+    --ring: 45 85% 65%;               /* Gold focus ring */
+    
+    /* Furniture-specific tokens */
+    --success: 120 45% 45%;           /* For in-stock status */
+    --warning: 38 92% 50%;            /* For low stock */
+    --trust: 45 85% 65%;              /* Gold for trust badges */
+    
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(210 47% 15%) 0%, hsl(210 35% 25%) 100%);
+    --gradient-accent: linear-gradient(45deg, hsl(45 85% 65%) 0%, hsl(45 75% 75%) 100%);
+    --gradient-subtle: linear-gradient(180deg, hsl(40 15% 98%) 0%, hsl(40 15% 95%) 100%);
+    
+    /* Shadows with brand colors */
+    --shadow-soft: 0 2px 20px hsl(210 47% 15% / 0.08);
+    --shadow-medium: 0 8px 30px hsl(210 47% 15% / 0.12);
+    --shadow-strong: 0 15px 40px hsl(210 47% 15% / 0.16);
+    --shadow-gold: 0 4px 20px hsl(45 85% 65% / 0.25);
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+/* Typography Scale */
+.text-hero { font-size: clamp(2.5rem, 8vw, 4rem); font-weight: 700; line-height: 1.1; }
+.text-display { font-size: clamp(2rem, 6vw, 3rem); font-weight: 600; line-height: 1.2; }
+.text-headline { font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 600; line-height: 1.3; }
+
+/* Animation System */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes goldShimmer {
+  0%, 100% { background-position: -200% 0; }
+  50% { background-position: 200% 0; }
+}
+
+/* Furniture-specific Component Classes */
+.product-card {
+  @apply bg-card rounded-lg overflow-hidden transition-all duration-300 hover:shadow-[var(--shadow-medium)] hover:-translate-y-1;
+}
+
+.price-block {
+  @apply text-2xl font-bold text-primary;
+}
+
+.trust-badge {
+  @apply inline-flex items-center gap-2 px-3 py-1 bg-accent/10 text-accent text-sm font-medium rounded-full;
+}
+
+.delivery-badge {
+  @apply inline-flex items-center gap-1 px-2 py-1 bg-success/10 text-success text-xs font-medium rounded;
+}
+
+.btn-primary {
+  @apply bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold transition-all duration-200 hover:bg-primary/90 focus:ring-2 focus:ring-ring focus:ring-offset-2 active:scale-[0.98];
+}
+
+.btn-accent {
+  @apply bg-accent text-accent-foreground px-6 py-3 rounded-lg font-semibold transition-all duration-200 hover:bg-accent/90 focus:ring-2 focus:ring-ring focus:ring-offset-2 active:scale-[0.98];
+}
+
+.btn-ghost {
+  @apply bg-transparent text-primary border border-border px-6 py-3 rounded-lg font-semibold transition-all duration-200 hover:bg-muted focus:ring-2 focus:ring-ring focus:ring-offset-2;
+}
+
+.hero-gradient {
+  background: var(--gradient-hero);
+}
+
+.gold-shimmer {
+  background: linear-gradient(90deg, transparent, hsl(var(--accent) / 0.3), transparent);
+  background-size: 200% 100%;
+  animation: goldShimmer 2s ease-in-out infinite;
+}
+
+/* Animations */
+.animate-fade-up { animation: fadeInUp 0.6s ease-out; }
+.animate-slide-right { animation: slideInRight 0.5s ease-out; }
+.animate-scale-in { animation: scaleIn 0.4s ease-out; }
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+
+  /* Focus styles for accessibility */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2;
+  }
+}
