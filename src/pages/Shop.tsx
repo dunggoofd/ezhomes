@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import VirtualTourSection from '@/components/VirtualTourSection';
 import { ShopProductCard } from '@/components/ShopProductCard';
-import { products } from '@/data/products';
+import { fetchProducts } from '@/services/woocommerce';
+import { transformWCProduct } from '@/utils/productTransformer';
+import type { Product } from '@/data/products';
 
 const categories = [
   { id: 'sofas', label: 'Sofas' },
@@ -12,6 +14,28 @@ const categories = [
 
 export default function Shop() {
   const [activeCategory, setActiveCategory] = useState('all');
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadProducts() {
+      try {
+        setLoading(true);
+        const wcProducts = await fetchProducts();
+        const transformedProducts = wcProducts.map(transformWCProduct);
+        setProducts(transformedProducts);
+        setError(null);
+      } catch (err) {
+        console.error('Failed to load products:', err);
+        setError('Failed to load products. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    loadProducts();
+  }, []);
 
   return (
     <Layout>
@@ -47,18 +71,41 @@ export default function Shop() {
 
           {/* Products Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {(() => {
-              const normalized = (s?: string) => (s || '').toLowerCase();
-              let filtered = products;
-              if (activeCategory === 'sofas') {
-                filtered = products.filter(p => normalized(p.category).includes('sofa'));
-              } else if (activeCategory === 'compression-bed') {
-                filtered = products.filter(p => normalized(p.category).includes('compression bed'));
-              }
-              return filtered.map((product) => (
-                <ShopProductCard key={product.id} product={product} />
-              ));
-            })()}
+            {loading ? (
+              // Loading state
+              <div className="col-span-full text-center py-12">
+                <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent"></div>
+                <p className="mt-4 text-muted-foreground">Loading products...</p>
+              </div>
+            ) : error ? (
+              // Error state
+              <div className="col-span-full text-center py-12">
+                <p className="text-destructive">{error}</p>
+              </div>
+            ) : (
+              // Products
+              (() => {
+                const normalized = (s?: string) => (s || '').toLowerCase();
+                let filtered = products;
+                if (activeCategory === 'sofas') {
+                  filtered = products.filter(p => normalized(p.category).includes('sofa'));
+                } else if (activeCategory === 'compression-bed') {
+                  filtered = products.filter(p => normalized(p.category).includes('compression bed'));
+                }
+                
+                if (filtered.length === 0) {
+                  return (
+                    <div className="col-span-full text-center py-12">
+                      <p className="text-muted-foreground">No products found in this category.</p>
+                    </div>
+                  );
+                }
+                
+                return filtered.map((product) => (
+                  <ShopProductCard key={product.id} product={product} />
+                ));
+              })()
+            )}
           </div>
           </div>
 

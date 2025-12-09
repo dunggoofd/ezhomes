@@ -1,7 +1,29 @@
+import { useState, useEffect } from 'react';
 import { ProductCard } from './ProductCard';
-import { products } from '@/data/products';
+import { fetchProducts } from '@/services/woocommerce';
+import { transformWCProduct } from '@/utils/productTransformer';
+import type { Product } from '@/data/products';
 
 export const ProductGrid = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadProducts() {
+      try {
+        const wcProducts = await fetchProducts();
+        const transformedProducts = wcProducts.map(transformWCProduct);
+        setProducts(transformedProducts);
+      } catch (err) {
+        console.error('Failed to load products:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    loadProducts();
+  }, []);
+
   return (
     <section id="products" className="py-24 lg:py-32 bg-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -26,9 +48,20 @@ export const ProductGrid = () => {
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {products.slice(0, 6).map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+          {loading ? (
+            // Loading skeleton
+            Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="animate-pulse">
+                <div className="bg-muted rounded-lg h-64 mb-4"></div>
+                <div className="h-4 bg-muted rounded w-3/4 mb-2"></div>
+                <div className="h-4 bg-muted rounded w-1/2"></div>
+              </div>
+            ))
+          ) : (
+            products.slice(0, 6).map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))
+          )}
         </div>
 
         {/* Bottom CTA */}
