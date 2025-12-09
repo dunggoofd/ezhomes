@@ -31,11 +31,11 @@ export const Header = () => {
 
       {/* Main Header */}
       <header className="bg-background/95 backdrop-blur-md sticky top-0 z-50 border-b border-border/50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 lg:h-20">
+        <div className="container mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="flex items-center justify-between h-20 lg:h-20">
             {/* Logo */}
-            <Link to="/" className="flex items-center">
-              <span className="text-2xl lg:text-3xl font-bold tracking-tight text-primary">
+            <Link to="/" className="flex items-center py-4 -ml-2 px-2 active:scale-95 transition-transform">
+              <span className="text-2xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-primary">
                 ezhomes
               </span>
             </Link>
@@ -58,25 +58,25 @@ export const Header = () => {
             </nav>
 
             {/* Header Actions */}
-            <div className="flex items-center space-x-4">
-              <button className="hidden sm:flex p-2 text-foreground/80 hover:text-primary transition-colors">
+            <div className="flex items-center space-x-2 md:space-x-4">
+              <button className="hidden sm:flex p-2 text-foreground/80 hover:text-primary transition-colors active:scale-95">
                 <User className="h-5 w-5" />
               </button>
               <button 
-                className="p-2 text-foreground/80 hover:text-primary transition-colors relative"
+                className="p-3 md:p-2 text-foreground/80 hover:text-primary transition-colors relative active:scale-95"
                 onClick={() => setIsCartOpen(!isCartOpen)}
               >
-                <ShoppingBag className="h-5 w-5" />
-                <span className="absolute -top-0.5 -right-0.5 bg-accent text-accent-foreground text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                <ShoppingBag className="h-6 md:h-5 w-6 md:w-5" />
+                <span className="absolute top-0 right-0 md:-top-0.5 md:-right-0.5 bg-accent text-accent-foreground text-[10px] font-bold rounded-full h-5 w-5 md:h-4 md:w-4 flex items-center justify-center">
                   {items.length}
                 </span>
               </button>
               {/* Mobile Menu Button */}
               <button 
-                className="md:hidden p-2 text-foreground/80 hover:text-primary transition-colors"
+                className="md:hidden p-3 text-foreground/80 hover:text-primary transition-colors active:scale-95"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               >
-                <Menu className="h-5 w-5" />
+                <Menu className="h-6 w-6" />
               </button>
             </div>
           </div>

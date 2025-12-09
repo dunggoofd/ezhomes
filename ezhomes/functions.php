@@ -596,3 +596,16 @@ function ezhomes_excerpt_more( $more ) {
     return '...';
 }
 add_filter( 'excerpt_more', 'ezhomes_excerpt_more' );
+
+/**
+ * Allow public access to WooCommerce products via REST API
+ */
+add_filter('woocommerce_rest_check_permissions', 'allow_public_wc_rest_api', 10, 4);
+
+function allow_public_wc_rest_api($permission, $context, $object_id, $post_type) {
+    // Allow public read access to products
+    if ($context === 'read' && in_array($post_type, array('product', 'product_variation'))) {
+        return true;
+    }
+    return $permission;
+}

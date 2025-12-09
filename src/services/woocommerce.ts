@@ -1,5 +1,5 @@
 // WooCommerce API Service
-const WC_API_URL = 'https://ezhomes.co/wp-json/wc/v3';
+const WC_API_URL = 'https://wp.ezhomes.co/wp-json/wc/v3';
 
 export interface WCProduct {
   id: number;

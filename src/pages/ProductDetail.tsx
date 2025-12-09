@@ -74,29 +74,29 @@ const ProductDetail = () => {
   return (
     <Layout>
       {/* Breadcrumb */}
-      <div className="container mx-auto px-4 py-4">
-        <Link to="/shop" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+      <div className="container mx-auto px-6 sm:px-8 lg:px-12 py-3 md:py-4">
+        <Link to="/shop" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors min-h-[44px] -ml-2 px-2 active:scale-95">
           <ChevronLeft className="w-4 h-4" />
           Back to Shop
         </Link>
       </div>
 
-      <main className="container mx-auto px-4 pb-16">
-        <div className="grid gap-8 lg:gap-12 lg:grid-cols-[3fr_1fr] items-start">
+      <main className="container mx-auto px-6 sm:px-8 lg:px-12 pb-16">
+        <div className="grid gap-6 md:gap-8 lg:gap-12 lg:grid-cols-[3fr_1fr] items-start">
           {/* Left: Image Gallery (larger) */}
-          <div className="flex gap-4">
-            {/* Thumbnails */}
-              <div className="flex flex-col gap-3 w-20 shrink-0 overflow-auto max-h-[70vh]">
+          <div className="flex flex-col md:flex-row gap-3 md:gap-4">
+            {/* Thumbnails - horizontal on mobile, vertical on desktop */}
+              <div className="flex md:flex-col gap-2 md:gap-3 md:w-20 shrink-0 overflow-x-auto md:overflow-y-auto md:max-h-[70vh] pb-2 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0">
                 {galleryImages.map((img, idx) => (
                   <button
                     key={idx}
                     onClick={() => setSelectedImage(idx)}
-                    className={`relative rounded-lg overflow-hidden border-2 transition-all ${
+                    className={`relative rounded-lg overflow-hidden border-2 transition-all shrink-0 active:scale-95 ${
                       selectedImage === idx 
                         ? "border-primary ring-2 ring-primary/20" 
                         : "border-border hover:border-muted-foreground"
                     }`}
-                    style={{ width: 64, height: 64 }}
+                    style={{ width: 64, height: 64, minWidth: 64 }}
                   >
                     <img 
                       src={img} 
@@ -113,37 +113,37 @@ const ProductDetail = () => {
               </div>
 
               {/* Main Image */}
-              <div className="relative flex-1 rounded-xl overflow-hidden bg-muted flex items-center justify-center">
+              <div className="relative flex-1 rounded-lg md:rounded-xl overflow-hidden bg-muted flex items-center justify-center">
                 {discount > 0 && (
-                  <span className="absolute top-4 left-4 z-10 bg-primary text-primary-foreground text-sm font-semibold px-3 py-1.5 rounded-full">
+                  <span className="absolute top-3 md:top-4 left-3 md:left-4 z-10 bg-primary text-primary-foreground text-xs md:text-sm font-semibold px-2.5 md:px-3 py-1 md:py-1.5 rounded-full">
                     {discount}% OFF
                   </span>
                 )}
                 <img
                   src={galleryImages[selectedImage]}
                   alt={product.title}
-                  className="w-full h-[85vh] object-cover"
+                  className="w-full h-[60vh] md:h-[70vh] lg:h-[85vh] object-cover"
                   style={{ display: 'block' }}
                 />
-                <button className="absolute bottom-4 right-4 p-3 bg-background/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-background transition-colors">
+                <button className="absolute bottom-3 md:bottom-4 right-3 md:right-4 p-2.5 md:p-3 bg-background/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-background transition-colors active:scale-95">
                   <ZoomIn className="w-5 h-5" />
                 </button>
               </div>
           </div>
 
             {/* Right: Product Info (narrower/tighter) */}
-            <div className="space-y-6 w-full lg:max-w-[420px] lg:pl-6">
+            <div className="space-y-5 md:space-y-6 w-full lg:max-w-[420px] lg:pl-6">
             {/* Title & Rating */}
             <div>
-              <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-2 md:mb-3">
                 {product.title}
               </h1>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <div className="flex">
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`w-5 h-5 ${
+                      className={`w-4 md:w-5 h-4 md:h-5 ${
                         i < Math.floor(product.rating)
                           ? "text-yellow-400 fill-yellow-400"
                           : "text-muted-foreground"
@@ -151,7 +151,7 @@ const ProductDetail = () => {
                     />
                   ))}
                 </div>
-                <span className="text-muted-foreground">
+                <span className="text-sm md:text-base text-muted-foreground">
                   {product.reviewCount.toLocaleString()} reviews
                 </span>
               </div>
@@ -160,10 +160,10 @@ const ProductDetail = () => {
             {/* Color Selector */}
             {product.colorVariants && product.colorVariants.length > 0 && (
               <div>
-                <p className="text-sm text-muted-foreground mb-3">
+                <p className="text-xs md:text-sm text-muted-foreground mb-2 md:mb-3">
                   COLOR <span className="text-foreground font-medium">{product.colorVariants.find(v => v.productId === product.id)?.color || product.variants[0].color}</span>
                 </p>
-                <div className="flex gap-3 flex-wrap">
+                <div className="flex gap-2 md:gap-3 flex-wrap">
                   {product.colorVariants.map((variant) => (
                     <Tooltip key={variant.productId}>
                       <TooltipTrigger asChild>
@@ -173,7 +173,7 @@ const ProductDetail = () => {
                               navigate(`/product/${variant.productId}`);
                             }
                           }}
-                          className={`w-16 h-10 rounded-lg border-2 transition-all ${
+                          className={`w-14 md:w-16 h-10 md:h-12 rounded-lg border-2 transition-all active:scale-95 ${
                             variant.productId === product.id
                               ? "border-primary ring-2 ring-primary/20"
                               : "border-border hover:border-muted-foreground cursor-pointer"
