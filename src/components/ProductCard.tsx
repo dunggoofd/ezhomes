@@ -147,11 +147,11 @@ export const ProductCard = ({ product }: ProductCardProps) => {
               <span className="text-xs md:text-sm font-semibold text-destructive">
                 Save ${(product.compareAtPrice! - product.price).toLocaleString()}
               </span>
-        </div>
-      </div>
-    </div>
-  );
-};            ${product.price.toLocaleString()}
+            )}
+          </div>
+          <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
+            <span className="text-xl md:text-2xl font-bold text-primary">
+              ${product.price.toLocaleString()}
             </span>
             <span className="text-xs md:text-sm text-muted-foreground">
               or ${Math.round(product.price / 4).toLocaleString()}/wk
@@ -159,6 +159,6 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
