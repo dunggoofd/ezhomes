@@ -1,6 +1,21 @@
 // WooCommerce API Service
 // Using serverless function proxy to keep API keys secure
 const API_PROXY = '/api/woocommerce';
+const WC_API_URL = 'https://wp.ezhomes.co/wp-json/wc/v3';
+
+// Development fallback - only use direct API in development
+const isDevelopment = import.meta.env.DEV;
+const WC_CONSUMER_KEY = import.meta.env.WC_CONSUMER_KEY || '';
+const WC_CONSUMER_SECRET = import.meta.env.WC_CONSUMER_SECRET || '';
+
+// Helper for dev mode direct API calls
+function addAuthParams(url: string): string {
+  if (!isDevelopment) return url;
+  const urlObj = new URL(url);
+  urlObj.searchParams.append('consumer_key', WC_CONSUMER_KEY);
+  urlObj.searchParams.append('consumer_secret', WC_CONSUMER_SECRET);
+  return urlObj.toString();
+}
 
 export interface WCProduct {
   id: number;
@@ -33,14 +48,23 @@ export interface WCProduct {
 
 export async function fetchProducts(): Promise<WCProduct[]> {
   try {
-    const response = await fetch(API_PROXY, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        endpoint: '/products?per_page=100',
-        method: 'GET',
-      }),
-    });
+    let response;
+    
+    if (isDevelopment) {
+      // Direct API call in development
+      response = await fetch(addAuthParams(`${WC_API_URL}/products?per_page=100`));
+    } else {
+      // Use proxy in production
+      response = await fetch(API_PROXY, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          endpoint: '/products?per_page=100',
+          method: 'GET',
+        }),
+      });
+    }
+    
     if (!response.ok) {
       throw new Error('Failed to fetch products');
     }
@@ -53,14 +77,23 @@ export async function fetchProducts(): Promise<WCProduct[]> {
 
 export async function fetchProduct(id: number): Promise<WCProduct | null> {
   try {
-    const response = await fetch(API_PROXY, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        endpoint: `/products/${id}`,
-        method: 'GET',
-      }),
-    });
+    let response;
+    
+    if (isDevelopment) {
+      // Direct API call in development
+      response = await fetch(addAuthParams(`${WC_API_URL}/products/${id}`));
+    } else {
+      // Use proxy in production
+      response = await fetch(API_PROXY, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          endpoint: `/products/${id}`,
+          method: 'GET',
+        }),
+      });
+    }
+    
     if (!response.ok) {
       throw new Error('Failed to fetch product');
     }
@@ -126,19 +159,29 @@ export interface WCOrder {
 // Create order with authentication (via secure proxy)
 export async function createOrder(orderData: WCOrderData): Promise<WCOrder | null> {
   try {
-    console.log('Creating order via secure proxy');
+    console.log(isDevelopment ? 'Creating order (dev mode)' : 'Creating order via secure proxy');
     
-    const response = await fetch(API_PROXY, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        endpoint: '/orders',
+    let response;
+    
+    if (isDevelopment) {
+      // Direct API call in development
+      response = await fetch(addAuthParams(`${WC_API_URL}/orders`), {
         method: 'POST',
-        body: orderData,
-      }),
-    });
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData),
+      });
+    } else {
+      // Use proxy in production
+      response = await fetch(API_PROXY, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          endpoint: '/orders',
+          method: 'POST',
+          body: orderData,
+        }),
+      });
+    }
 
     if (!response.ok) {
       const error = await response.json();
