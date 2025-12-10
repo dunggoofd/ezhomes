@@ -11,6 +11,7 @@ import Layout from "@/components/Layout";
 import { useCart } from "@/context/CartContext";
 import { formatPrice } from "@/data/products";
 import { createPaymentIntent, confirmPayment } from "@/services/paymentService";
+import { createOrder, type WCOrderData } from "@/services/woocommerce";
 import { toast } from "sonner";
 
 const stripePromise = loadStripe(
@@ -109,20 +110,59 @@ const CheckoutContent = () => {
       return;
     }
 
-    if (!stripe || !elements) {
-      setPaymentError("Payment system not ready. Please refresh and try again.");
-      return;
-    }
-
-    if (!clientSecret) {
-      setPaymentError("Payment not initialized. Please refresh and try again.");
-      return;
-    }
-
     setLoading(true);
 
     try {
-      // For pickup orders, skip Stripe payment
+      // Prepare WooCommerce order data
+      const orderData: WCOrderData = {
+        payment_method: formData.deliveryMethod === "pickup" ? "cod" : "woopayments",
+        payment_method_title: formData.deliveryMethod === "pickup" ? "Pay on Pickup" : "Card Payment",
+        set_paid: false, // Will be set to true after payment confirmation
+        billing: {
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          address_1: formData.address,
+          city: formData.city,
+          state: formData.state,
+          postcode: formData.postcode,
+          country: formData.country,
+          email: formData.email,
+          phone: formData.phone,
+        },
+        shipping: {
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          address_1: formData.address,
+          city: formData.city,
+          state: formData.state,
+          postcode: formData.postcode,
+          country: formData.country,
+        },
+        line_items: items.map(item => ({
+          product_id: item.id,
+          quantity: item.quantity,
+        })),
+      };
+
+      // Add shipping line if applicable
+      if (formData.deliveryMethod === "shipping" && shipping > 0) {
+        orderData.shipping_lines = [{
+          method_id: "flat_rate",
+          method_title: "Standard Shipping",
+          total: shipping.toFixed(2),
+        }];
+      }
+
+      // Create order in WooCommerce
+      const order = await createOrder(orderData);
+
+      if (!order) {
+        throw new Error("Failed to create order");
+      }
+
+      console.log("WooCommerce order created:", order);
+
+      // For pickup orders, order is complete
       if (formData.deliveryMethod === "pickup") {
         setOrderComplete(true);
         clearCart();
@@ -135,34 +175,16 @@ const CheckoutContent = () => {
         return;
       }
 
-      const paymentIntent = await confirmPayment(stripe, elements, clientSecret, {
-        name: `${formData.firstName} ${formData.lastName}`,
-        email: formData.email,
-        phone: formData.phone,
-        address: {
-          line1: formData.address,
-          city: formData.city,
-          state: formData.state,
-          postal_code: formData.postcode,
-          country: formData.country,
-        },
-      });
+      // For shipping orders, redirect to WooCommerce payment page
+      // Since we're using WooPayments, we need to redirect to WordPress checkout
+      toast.success("Order created! Redirecting to payment...");
+      
+      // Redirect to WordPress checkout for payment
+      window.location.href = `https://wp.ezhomes.co/checkout/order-pay/${order.id}/?pay_for_order=true&key=${order.order_key}`;
 
-      if (paymentIntent.status === "succeeded" || paymentIntent.status === "processing") {
-        setOrderComplete(true);
-        clearCart();
-        toast.success("Order placed successfully!");
-
-        // Redirect after 3 seconds
-        setTimeout(() => {
-          navigate("/shop");
-        }, 3000);
-      } else {
-        setPaymentError("Payment failed. Please try again.");
-      }
     } catch (error) {
-      setPaymentError(error instanceof Error ? error.message : "Payment processing failed");
-      toast.error("Payment failed. Please try again.");
+      setPaymentError(error instanceof Error ? error.message : "Order creation failed");
+      toast.error("Failed to place order. Please try again.");
       setLoading(false);
     }
   };

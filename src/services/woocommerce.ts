@@ -1,5 +1,15 @@
 // WooCommerce API Service
 const WC_API_URL = 'https://wp.ezhomes.co/wp-json/wc/v3';
+const WC_CONSUMER_KEY = import.meta.env.VITE_WC_CONSUMER_KEY;
+const WC_CONSUMER_SECRET = import.meta.env.VITE_WC_CONSUMER_SECRET;
+
+// Helper function to add auth params to URL
+function addAuthParams(url: string): string {
+  const urlObj = new URL(url);
+  urlObj.searchParams.append('consumer_key', WC_CONSUMER_KEY);
+  urlObj.searchParams.append('consumer_secret', WC_CONSUMER_SECRET);
+  return urlObj.toString();
+}
 
 export interface WCProduct {
   id: number;
@@ -52,6 +62,83 @@ export async function fetchProduct(id: number): Promise<WCProduct | null> {
     return await response.json();
   } catch (error) {
     console.error('Error fetching product:', error);
+    return null;
+  }
+}
+
+// Order creation interfaces
+export interface WCOrderLineItem {
+  product_id: number;
+  quantity: number;
+  variant_id?: number;
+}
+
+export interface WCOrderBilling {
+  first_name: string;
+  last_name: string;
+  address_1: string;
+  city: string;
+  state: string;
+  postcode: string;
+  country: string;
+  email: string;
+  phone: string;
+}
+
+export interface WCOrderShipping {
+  first_name: string;
+  last_name: string;
+  address_1: string;
+  city: string;
+  state: string;
+  postcode: string;
+  country: string;
+}
+
+export interface WCOrderData {
+  payment_method: string;
+  payment_method_title: string;
+  set_paid: boolean;
+  billing: WCOrderBilling;
+  shipping: WCOrderShipping;
+  line_items: WCOrderLineItem[];
+  shipping_lines?: Array<{
+    method_id: string;
+    method_title: string;
+    total: string;
+  }>;
+}
+
+export interface WCOrder {
+  id: number;
+  order_key: string;
+  status: string;
+  total: string;
+  date_created: string;
+}
+
+// Create order with authentication
+export async function createOrder(orderData: WCOrderData): Promise<WCOrder | null> {
+  try {
+    const authenticatedUrl = addAuthParams(`${WC_API_URL}/orders`);
+    
+    const response = await fetch(authenticatedUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(orderData),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      console.error('Order creation failed:', error);
+      throw new Error('Failed to create order');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error creating order:', error);
     return null;
   }
 }
