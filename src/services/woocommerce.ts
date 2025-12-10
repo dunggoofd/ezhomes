@@ -107,6 +107,7 @@ export interface WCOrderData {
     method_title: string;
     total: string;
   }>;
+  customer_note?: string;
 }
 
 export interface WCOrder {

@@ -68,15 +68,27 @@ const CheckoutContent = () => {
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
+    // Basic contact info (always required)
     if (!formData.firstName.trim()) newErrors.firstName = "First name required";
     if (!formData.lastName.trim()) newErrors.lastName = "Last name required";
-    if (!formData.email.trim()) newErrors.email = "Email required";
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = "Invalid email";
-    if (!formData.phone.trim()) newErrors.phone = "Phone required";
-    if (!formData.address.trim()) newErrors.address = "Address required";
-    if (!formData.city.trim()) newErrors.city = "City required";
-    if (!formData.state.trim()) newErrors.state = "State required";
-    if (!formData.postcode.trim()) newErrors.postcode = "Postcode required";
+    if (!formData.email.trim()) {
+      newErrors.email = "Email required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Invalid email format";
+    }
+    if (!formData.phone.trim()) {
+      newErrors.phone = "Phone required";
+    } else if (!/^[\d\s()+-]+$/.test(formData.phone)) {
+      newErrors.phone = "Invalid phone number";
+    }
+
+    // Address validation (only for shipping)
+    if (formData.deliveryMethod === "shipping") {
+      if (!formData.address.trim()) newErrors.address = "Address required";
+      if (!formData.city.trim()) newErrors.city = "City required";
+      if (!formData.state.trim()) newErrors.state = "State required";
+      if (!formData.postcode.trim()) newErrors.postcode = "Postcode required";
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -169,39 +181,51 @@ const CheckoutContent = () => {
         }];
       }
 
+      // Add order note for pickup location
+      if (formData.deliveryMethod === "pickup") {
+        orderData.customer_note = `Pickup Location: ${formData.pickupLocation === "sydney" ? "Sydney Showroom - 123 King Street, Sydney NSW 2000" : "Melbourne Showroom - 456 Collins Street, Melbourne VIC 3000"}`;
+      }
+
       // Create order in WooCommerce
       const order = await createOrder(orderData);
 
       if (!order) {
-        throw new Error("Failed to create order");
+        throw new Error("Failed to create order. Please try again or contact support.");
       }
 
-      console.log("WooCommerce order created:", order);
+      console.log("WooCommerce order created:", order.id);
 
-      // For pickup orders, order is complete
+      // For pickup orders, order is complete (pay on pickup)
       if (formData.deliveryMethod === "pickup") {
         setOrderComplete(true);
         clearCart();
-        toast.success("Order placed successfully! Pay when you pick up your order.");
+        toast.success(`Order #${order.id} placed successfully!`);
 
-        // Redirect after 3 seconds
+        // Redirect after 4 seconds
         setTimeout(() => {
           navigate("/shop");
-        }, 3000);
+        }, 4000);
         return;
       }
 
       // For shipping orders, redirect to WooCommerce payment page
-      // Since we're using WooPayments, we need to redirect to WordPress checkout
-      toast.success("Order created! Redirecting to payment...");
+      toast.success("Order created! Redirecting to secure payment...");
+      setLoading(false);
       
-      // Redirect to WordPress checkout for payment
-      window.location.href = `https://wp.ezhomes.co/checkout/order-pay/${order.id}/?pay_for_order=true&key=${order.order_key}`;
+      // Small delay before redirect for better UX
+      setTimeout(() => {
+        // Redirect to WordPress checkout for payment with WooPayments
+        window.location.href = `https://wp.ezhomes.co/checkout/order-pay/${order.id}/?pay_for_order=true&key=${order.order_key}`;
+      }, 1500);
 
     } catch (error) {
-      setPaymentError(error instanceof Error ? error.message : "Order creation failed");
-      toast.error("Failed to place order. Please try again.");
+      const errorMessage = error instanceof Error ? error.message : "Order creation failed";
+      setPaymentError(errorMessage);
+      toast.error(errorMessage);
       setLoading(false);
+      
+      // Log error for debugging
+      console.error("Checkout error:", error);
     }
   };
 
