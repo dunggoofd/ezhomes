@@ -16,6 +16,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
+    // Check if credentials are available
+    if (!WC_CONSUMER_KEY || !WC_CONSUMER_SECRET) {
+      console.error('Missing WooCommerce credentials');
+      return res.status(500).json({ 
+        error: 'WooCommerce API credentials not configured',
+        details: 'Please set WC_CONSUMER_KEY and WC_CONSUMER_SECRET environment variables'
+      });
+    }
+
     const { endpoint, method = 'GET', body } = req.body;
 
     if (!endpoint) {
@@ -24,8 +33,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // Build authenticated URL
     const url = new URL(`${WC_API_URL}${endpoint}`);
-    url.searchParams.append('consumer_key', WC_CONSUMER_KEY!);
-    url.searchParams.append('consumer_secret', WC_CONSUMER_SECRET!);
+    url.searchParams.append('consumer_key', WC_CONSUMER_KEY);
+    url.searchParams.append('consumer_secret', WC_CONSUMER_SECRET);
+
+    console.log(`Making ${method} request to WooCommerce:`, endpoint);
 
     // Make request to WooCommerce
     const response = await fetch(url.toString(), {
@@ -39,12 +50,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const data = await response.json();
 
     if (!response.ok) {
+      console.error('WooCommerce API error:', response.status, data);
       return res.status(response.status).json(data);
     }
 
     return res.status(200).json(data);
   } catch (error) {
     console.error('API Error:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ 
+      error: 'Internal server error',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
   }
 }
