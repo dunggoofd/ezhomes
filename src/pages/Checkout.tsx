@@ -125,10 +125,22 @@ const CheckoutContent = () => {
     setLoading(true);
 
     try {
+      // Determine payment method based on delivery and payment selection
+      let wcPaymentMethod = "woopayments";
+      let wcPaymentTitle = "Card Payment";
+      
+      if (formData.deliveryMethod === "pickup") {
+        wcPaymentMethod = "cod";
+        wcPaymentTitle = "Pay on Pickup";
+      } else if (paymentMethod === "bank_transfer") {
+        wcPaymentMethod = "bacs";
+        wcPaymentTitle = "Direct Bank Transfer";
+      }
+
       // Prepare WooCommerce order data
       const orderData: WCOrderData = {
-        payment_method: formData.deliveryMethod === "pickup" ? "cod" : "woopayments",
-        payment_method_title: formData.deliveryMethod === "pickup" ? "Pay on Pickup" : "Card Payment",
+        payment_method: wcPaymentMethod,
+        payment_method_title: wcPaymentTitle,
         set_paid: false, // Will be set to true after payment confirmation
         billing: {
           first_name: formData.firstName,
@@ -184,6 +196,11 @@ const CheckoutContent = () => {
       // Add order note for pickup location
       if (formData.deliveryMethod === "pickup") {
         orderData.customer_note = "Pickup Location: U14, 157 North Road Woodridge, Brisbane, Queensland, Australia 4114";
+      }
+      
+      // Add note for bank transfer
+      if (paymentMethod === "bank_transfer") {
+        orderData.customer_note = (orderData.customer_note || "") + "\nPayment Method: Direct Bank Transfer";
       }
 
       // Create order in WooCommerce
