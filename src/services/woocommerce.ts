@@ -1,15 +1,6 @@
 // WooCommerce API Service
-const WC_API_URL = 'https://wp.ezhomes.co/wp-json/wc/v3';
-const WC_CONSUMER_KEY = import.meta.env.VITE_WC_CONSUMER_KEY;
-const WC_CONSUMER_SECRET = import.meta.env.VITE_WC_CONSUMER_SECRET;
-
-// Helper function to add auth params to URL
-function addAuthParams(url: string): string {
-  const urlObj = new URL(url);
-  urlObj.searchParams.append('consumer_key', WC_CONSUMER_KEY);
-  urlObj.searchParams.append('consumer_secret', WC_CONSUMER_SECRET);
-  return urlObj.toString();
-}
+// Using serverless function proxy to keep API keys secure
+const API_PROXY = '/api/woocommerce';
 
 export interface WCProduct {
   id: number;
@@ -42,7 +33,14 @@ export interface WCProduct {
 
 export async function fetchProducts(): Promise<WCProduct[]> {
   try {
-    const response = await fetch(`${WC_API_URL}/products?per_page=100`);
+    const response = await fetch(API_PROXY, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        endpoint: '/products?per_page=100',
+        method: 'GET',
+      }),
+    });
     if (!response.ok) {
       throw new Error('Failed to fetch products');
     }
@@ -55,7 +53,14 @@ export async function fetchProducts(): Promise<WCProduct[]> {
 
 export async function fetchProduct(id: number): Promise<WCProduct | null> {
   try {
-    const response = await fetch(`${WC_API_URL}/products/${id}`);
+    const response = await fetch(API_PROXY, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        endpoint: `/products/${id}`,
+        method: 'GET',
+      }),
+    });
     if (!response.ok) {
       throw new Error('Failed to fetch product');
     }
@@ -118,20 +123,21 @@ export interface WCOrder {
   date_created: string;
 }
 
-// Create order with authentication
+// Create order with authentication (via secure proxy)
 export async function createOrder(orderData: WCOrderData): Promise<WCOrder | null> {
   try {
-    const authenticatedUrl = addAuthParams(`${WC_API_URL}/orders`);
+    console.log('Creating order via secure proxy');
     
-    console.log('Creating order with data:', orderData);
-    console.log('API URL:', authenticatedUrl.replace(/consumer_(key|secret)=[^&]+/g, 'consumer_$1=***'));
-    
-    const response = await fetch(authenticatedUrl, {
+    const response = await fetch(API_PROXY, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(orderData),
+      body: JSON.stringify({
+        endpoint: '/orders',
+        method: 'POST',
+        body: orderData,
+      }),
     });
 
     if (!response.ok) {
