@@ -134,16 +134,16 @@ const CheckoutContent = () => {
           first_name: formData.firstName,
           last_name: formData.lastName,
           address_1: formData.deliveryMethod === "pickup" ? 
-            (formData.pickupLocation === "sydney" ? "123 King Street" : "456 Collins Street") : 
+            "U14, 157 North Road Woodridge" : 
             formData.address,
           city: formData.deliveryMethod === "pickup" ? 
-            (formData.pickupLocation === "sydney" ? "Sydney" : "Melbourne") : 
+            "Brisbane" : 
             formData.city,
           state: formData.deliveryMethod === "pickup" ? 
-            (formData.pickupLocation === "sydney" ? "NSW" : "VIC") : 
+            "Queensland" : 
             formData.state,
           postcode: formData.deliveryMethod === "pickup" ? 
-            (formData.pickupLocation === "sydney" ? "2000" : "3000") : 
+            "4114" : 
             formData.postcode,
           country: formData.country,
           email: formData.email,
@@ -153,16 +153,16 @@ const CheckoutContent = () => {
           first_name: formData.firstName,
           last_name: formData.lastName,
           address_1: formData.deliveryMethod === "pickup" ? 
-            (formData.pickupLocation === "sydney" ? "123 King Street" : "456 Collins Street") : 
+            "U14, 157 North Road Woodridge" : 
             formData.address,
           city: formData.deliveryMethod === "pickup" ? 
-            (formData.pickupLocation === "sydney" ? "Sydney" : "Melbourne") : 
+            "Brisbane" : 
             formData.city,
           state: formData.deliveryMethod === "pickup" ? 
-            (formData.pickupLocation === "sydney" ? "NSW" : "VIC") : 
+            "Queensland" : 
             formData.state,
           postcode: formData.deliveryMethod === "pickup" ? 
-            (formData.pickupLocation === "sydney" ? "2000" : "3000") : 
+            "4114" : 
             formData.postcode,
           country: formData.country,
         },
@@ -183,7 +183,7 @@ const CheckoutContent = () => {
 
       // Add order note for pickup location
       if (formData.deliveryMethod === "pickup") {
-        orderData.customer_note = `Pickup Location: ${formData.pickupLocation === "sydney" ? "Sydney Showroom - 123 King Street, Sydney NSW 2000" : "Melbourne Showroom - 456 Collins Street, Melbourne VIC 3000"}`;
+        orderData.customer_note = "Pickup Location: U14, 157 North Road Woodridge, Brisbane, Queensland, Australia 4114";
       }
 
       // Create order in WooCommerce
@@ -335,16 +335,11 @@ const CheckoutContent = () => {
                 {/* Pickup Location Selection */}
                 {formData.deliveryMethod === "pickup" && (
                   <div className="space-y-3 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                    <label className="text-sm font-medium">Select Pickup Location *</label>
-                    <select
-                      name="pickupLocation"
-                      value={formData.pickupLocation}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 border rounded-md bg-white"
-                    >
-                      <option value="sydney">Sydney Showroom - 123 King Street, Sydney NSW 2000</option>
-                      <option value="melbourne">Melbourne Showroom - 456 Collins Street, Melbourne VIC 3000</option>
-                    </select>
+                    <label className="text-sm font-medium">Pickup Location</label>
+                    <div className="p-3 bg-white rounded-md border">
+                      <p className="font-medium text-sm">U14, 157 North Road Woodridge</p>
+                      <p className="text-sm text-muted-foreground">Brisbane, Queensland, Australia 4114</p>
+                    </div>
                     <p className="text-xs text-blue-700">
                       📅 Pickup available within 5-7 business days after order confirmation
                     </p>
@@ -703,9 +698,7 @@ const CheckoutContent = () => {
                 <div className="bg-blue-50 border border-blue-200 rounded p-3 text-xs space-y-1">
                   <p className="font-semibold text-blue-900">📍 Pickup Details</p>
                   <p className="text-blue-800">
-                    {formData.pickupLocation === "sydney" 
-                      ? "Sydney Showroom - 123 King Street, Sydney NSW 2000"
-                      : "Melbourne Showroom - 456 Collins Street, Melbourne VIC 3000"}
+                    U14, 157 North Road Woodridge, Brisbane, Queensland 4114
                   </p>
                   <p className="text-blue-700">Ready within 5-7 business days</p>
                 </div>
