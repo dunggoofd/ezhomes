@@ -121,10 +121,18 @@ const CheckoutContent = () => {
         billing: {
           first_name: formData.firstName,
           last_name: formData.lastName,
-          address_1: formData.address,
-          city: formData.city,
-          state: formData.state,
-          postcode: formData.postcode,
+          address_1: formData.deliveryMethod === "pickup" ? 
+            (formData.pickupLocation === "sydney" ? "123 King Street" : "456 Collins Street") : 
+            formData.address,
+          city: formData.deliveryMethod === "pickup" ? 
+            (formData.pickupLocation === "sydney" ? "Sydney" : "Melbourne") : 
+            formData.city,
+          state: formData.deliveryMethod === "pickup" ? 
+            (formData.pickupLocation === "sydney" ? "NSW" : "VIC") : 
+            formData.state,
+          postcode: formData.deliveryMethod === "pickup" ? 
+            (formData.pickupLocation === "sydney" ? "2000" : "3000") : 
+            formData.postcode,
           country: formData.country,
           email: formData.email,
           phone: formData.phone,
@@ -132,10 +140,18 @@ const CheckoutContent = () => {
         shipping: {
           first_name: formData.firstName,
           last_name: formData.lastName,
-          address_1: formData.address,
-          city: formData.city,
-          state: formData.state,
-          postcode: formData.postcode,
+          address_1: formData.deliveryMethod === "pickup" ? 
+            (formData.pickupLocation === "sydney" ? "123 King Street" : "456 Collins Street") : 
+            formData.address,
+          city: formData.deliveryMethod === "pickup" ? 
+            (formData.pickupLocation === "sydney" ? "Sydney" : "Melbourne") : 
+            formData.city,
+          state: formData.deliveryMethod === "pickup" ? 
+            (formData.pickupLocation === "sydney" ? "NSW" : "VIC") : 
+            formData.state,
+          postcode: formData.deliveryMethod === "pickup" ? 
+            (formData.pickupLocation === "sydney" ? "2000" : "3000") : 
+            formData.postcode,
           country: formData.country,
         },
         line_items: items.map(item => ({

@@ -122,6 +122,9 @@ export async function createOrder(orderData: WCOrderData): Promise<WCOrder | nul
   try {
     const authenticatedUrl = addAuthParams(`${WC_API_URL}/orders`);
     
+    console.log('Creating order with data:', orderData);
+    console.log('API URL:', authenticatedUrl.replace(/consumer_(key|secret)=[^&]+/g, 'consumer_$1=***'));
+    
     const response = await fetch(authenticatedUrl, {
       method: 'POST',
       headers: {
@@ -132,13 +135,17 @@ export async function createOrder(orderData: WCOrderData): Promise<WCOrder | nul
 
     if (!response.ok) {
       const error = await response.json();
-      console.error('Order creation failed:', error);
-      throw new Error('Failed to create order');
+      console.error('Order creation failed:', {
+        status: response.status,
+        statusText: response.statusText,
+        error: error
+      });
+      throw new Error(error.message || `Failed to create order: ${response.statusText}`);
     }
 
     return await response.json();
   } catch (error) {
     console.error('Error creating order:', error);
-    return null;
+    throw error;
   }
 }
