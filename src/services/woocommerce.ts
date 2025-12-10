@@ -52,9 +52,11 @@ export async function fetchProducts(): Promise<WCProduct[]> {
     
     if (isDevelopment) {
       // Direct API call in development
+      console.log('Fetching products (dev mode)');
       response = await fetch(addAuthParams(`${WC_API_URL}/products?per_page=100`));
     } else {
       // Use proxy in production
+      console.log('Fetching products via proxy');
       response = await fetch(API_PROXY, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -66,9 +68,14 @@ export async function fetchProducts(): Promise<WCProduct[]> {
     }
     
     if (!response.ok) {
-      throw new Error('Failed to fetch products');
+      const errorText = await response.text();
+      console.error('Product fetch failed:', response.status, errorText);
+      throw new Error(`Failed to fetch products: ${response.status}`);
     }
-    return await response.json();
+    
+    const data = await response.json();
+    console.log(`Fetched ${data.length} products`);
+    return data;
   } catch (error) {
     console.error('Error fetching products:', error);
     return [];
