@@ -17,6 +17,7 @@ const ProductDetail = () => {
   const [selectedVariant, setSelectedVariant] = useState(0);
   const [selectedImage, setSelectedImage] = useState(0);
   const [addonQuantities, setAddonQuantities] = useState<Record<string, number>>({});
+  const [isImageSticky, setIsImageSticky] = useState(true);
 
   // Prefer externalImage when available, fall back to local images
   const primaryImage = product.externalImage ?? product.images[0];
@@ -71,6 +72,25 @@ const ProductDetail = () => {
 
   const { addToCart } = useCart();
 
+  // Add scroll listener to detect when to release sticky image
+  useEffect(() => {
+    const handleScroll = () => {
+      // Get the add-to-cart button position
+      const addToCartSection = document.getElementById('add-to-cart-section');
+      if (addToCartSection) {
+        const rect = addToCartSection.getBoundingClientRect();
+        // If add-to-cart section is visible (not below viewport), release sticky
+        setIsImageSticky(rect.top > window.innerHeight / 2);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Original addToCart
+  // const { addToCart } = useCart();
+
   return (
     <Layout>
       {/* Breadcrumb */}
@@ -82,9 +102,11 @@ const ProductDetail = () => {
       </div>
 
       <main className="container mx-auto px-6 sm:px-8 lg:px-12 pb-16">
-        <div className="grid gap-6 md:gap-8 lg:gap-12 lg:grid-cols-[3fr_1fr] items-start">
+        <div className="grid gap-6 md:gap-8 lg:gap-12 lg:grid-cols-[3fr_1fr] items-start lg:items-stretch">
           {/* Left: Image Gallery (larger) */}
-          <div className="flex flex-col md:flex-row gap-3 md:gap-4">
+          <div className={`flex flex-col md:flex-row gap-3 md:gap-4 ${
+            isImageSticky ? 'lg:sticky lg:top-20 lg:max-h-screen' : ''
+          }`}>
             {/* Thumbnails - horizontal on mobile, vertical on desktop */}
               <div className="flex md:flex-col gap-2 md:gap-3 md:w-20 shrink-0 overflow-x-auto md:overflow-y-auto md:max-h-[70vh] pb-2 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0">
                 {galleryImages.map((img, idx) => (
@@ -307,7 +329,7 @@ const ProductDetail = () => {
             </div>
 
             {/* Price & Add to Cart */}
-            <div className="border-t border-border pt-6 space-y-4">
+            <div id="add-to-cart-section" className="border-t border-border pt-6 space-y-4">
               <div className="flex items-baseline gap-3">
                 {product.compareAtPrice && (
                   <span className="text-xl text-muted-foreground line-through">
