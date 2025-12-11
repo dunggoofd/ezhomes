@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { ProductCard } from './ProductCard';
 import { fetchProducts } from '@/services/woocommerce';
 import { transformWCProduct } from '@/utils/productTransformer';
+import { products as fallbackProducts } from '@/data/products';
 import type { Product } from '@/data/products';
 
 export const ProductGrid = () => {
@@ -12,10 +13,19 @@ export const ProductGrid = () => {
     async function loadProducts() {
       try {
         const wcProducts = await fetchProducts();
-        const transformedProducts = wcProducts.map(transformWCProduct);
-        setProducts(transformedProducts);
+        
+        // Use WooCommerce products if available, otherwise use fallback
+        if (wcProducts && wcProducts.length > 0) {
+          const transformedProducts = wcProducts.map(transformWCProduct);
+          setProducts(transformedProducts);
+        } else {
+          console.log('No WooCommerce products found, using fallback products');
+          setProducts(fallbackProducts);
+        }
       } catch (err) {
         console.error('Failed to load products:', err);
+        console.log('Using fallback products due to error');
+        setProducts(fallbackProducts);
       } finally {
         setLoading(false);
       }

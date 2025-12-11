@@ -4,6 +4,7 @@ import VirtualTourSection from '@/components/VirtualTourSection';
 import { ShopProductCard } from '@/components/ShopProductCard';
 import { fetchProducts } from '@/services/woocommerce';
 import { transformWCProduct } from '@/utils/productTransformer';
+import { products as fallbackProducts } from '@/data/products';
 import type { Product } from '@/data/products';
 
 const categories = [
@@ -23,12 +24,21 @@ export default function Shop() {
       try {
         setLoading(true);
         const wcProducts = await fetchProducts();
-        const transformedProducts = wcProducts.map(transformWCProduct);
-        setProducts(transformedProducts);
+        
+        // Use WooCommerce products if available, otherwise use fallback
+        if (wcProducts && wcProducts.length > 0) {
+          const transformedProducts = wcProducts.map(transformWCProduct);
+          setProducts(transformedProducts);
+        } else {
+          console.log('No WooCommerce products found, using fallback products');
+          setProducts(fallbackProducts);
+        }
         setError(null);
       } catch (err) {
         console.error('Failed to load products:', err);
-        setError('Failed to load products. Please try again later.');
+        console.log('Using fallback products due to error');
+        setProducts(fallbackProducts);
+        setError(null); // Don't show error, just use fallback
       } finally {
         setLoading(false);
       }
