@@ -42,7 +42,9 @@ const ProductDetail = () => {
         
         if (wcProduct) {
           const transformedProduct = transformWCProduct(wcProduct);
-          console.log('Transformed product:', transformedProduct.name);
+          console.log('Transformed product:', transformedProduct);
+          console.log('Transformed product title:', transformedProduct.title);
+          console.log('Transformed product images:', transformedProduct.images);
           setProduct(transformedProduct);
         } else {
           console.warn('Product not found in WooCommerce, using fallback');
@@ -241,7 +243,7 @@ const ProductDetail = () => {
             {product.colorVariants && product.colorVariants.length > 0 && (
               <div>
                 <p className="text-xs md:text-sm text-muted-foreground mb-2 md:mb-3">
-                  COLOR <span className="text-foreground font-medium">{product.colorVariants.find(v => v.productId === product.id)?.color || product.variants[0].color}</span>
+                  COLOR <span className="text-foreground font-medium">{product.colorVariants.find(v => v.productId === product.id)?.color || product.variants?.[0]?.color || 'Default'}</span>
                 </p>
                 <div className="flex gap-2 md:gap-3 flex-wrap">
                   {product.colorVariants.map((variant) => (
