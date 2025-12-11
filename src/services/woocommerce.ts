@@ -85,13 +85,17 @@ export async function fetchProducts(): Promise<WCProduct[]> {
 
 export async function fetchProduct(id: number): Promise<WCProduct | null> {
   try {
+    console.log(`[WC Service] Fetching product ${id}, isDevelopment:`, isDevelopment);
     let response;
     
     if (isDevelopment) {
       // Direct API call in development
-      response = await fetch(addAuthParams(`${WC_API_URL}/products/${id}`));
+      const url = addAuthParams(`${WC_API_URL}/products/${id}`);
+      console.log('[WC Service] Dev mode - Direct API call');
+      response = await fetch(url);
     } else {
       // Use proxy in production
+      console.log('[WC Service] Production mode - Using proxy');
       response = await fetch(API_PROXY, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -102,12 +106,19 @@ export async function fetchProduct(id: number): Promise<WCProduct | null> {
       });
     }
     
+    console.log('[WC Service] Response status:', response.status, response.ok);
+    
     if (!response.ok) {
-      throw new Error('Failed to fetch product');
+      const errorText = await response.text();
+      console.error('[WC Service] Failed to fetch product:', response.status, errorText);
+      throw new Error(`Failed to fetch product: ${response.status}`);
     }
-    return await response.json();
+    
+    const data = await response.json();
+    console.log('[WC Service] Product fetched successfully:', data.name);
+    return data;
   } catch (error) {
-    console.error('Error fetching product:', error);
+    console.error('[WC Service] Error fetching product:', error);
     return null;
   }
 }

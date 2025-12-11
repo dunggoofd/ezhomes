@@ -26,24 +26,36 @@ const ProductDetail = () => {
   // Fetch product from WooCommerce
   useEffect(() => {
     async function loadProduct() {
-      if (!id) return;
+      if (!id) {
+        console.error('No product ID provided');
+        setLoading(false);
+        return;
+      }
+      
+      console.log('Loading product:', id);
       
       try {
         setLoading(true);
         const wcProduct = await fetchProduct(parseInt(id));
         
+        console.log('WooCommerce API response:', wcProduct ? 'Success' : 'No product found');
+        
         if (wcProduct) {
           const transformedProduct = transformWCProduct(wcProduct);
+          console.log('Transformed product:', transformedProduct.name);
           setProduct(transformedProduct);
         } else {
+          console.warn('Product not found in WooCommerce, using fallback');
           // Fallback to hardcoded products
           const fallbackProduct = products.find(p => p.id === id) || products[0];
+          console.log('Using fallback product:', fallbackProduct?.name);
           setProduct(fallbackProduct);
         }
       } catch (error) {
         console.error('Failed to load product:', error);
         // Fallback to hardcoded products
         const fallbackProduct = products.find(p => p.id === id) || products[0];
+        console.log('Error fallback product:', fallbackProduct?.name);
         setProduct(fallbackProduct);
       } finally {
         setLoading(false);
