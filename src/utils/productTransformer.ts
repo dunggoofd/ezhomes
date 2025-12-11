@@ -17,8 +17,10 @@ export function transformWCProduct(wcProduct: WCProduct): Product {
     variants: extractVariants(wcProduct),
     badges: extractBadges(wcProduct),
     category: wcProduct.categories[0]?.name || 'Uncategorized',
-    externalUrl: `https://ezhomes.co/product/${wcProduct.slug}`,
+    externalUrl: `https://ezhomes.co/product/${wcProduct.id}`,
     externalImage: wcProduct.images[0]?.src || '',
+    // Don't include colorVariants for WooCommerce products to avoid linking issues
+    colorVariants: undefined,
   };
 }
 
