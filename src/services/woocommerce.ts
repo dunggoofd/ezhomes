@@ -1,7 +1,8 @@
 // WooCommerce API Service
 // Using serverless function proxy to keep API keys secure
 const API_PROXY = '/api/woocommerce';
-const WC_API_URL = 'https://wp.ezhomes.co/wp-json/wc/v3';
+// Using HTTP temporarily due to SSL certificate issues on subdomain
+const WC_API_URL = 'http://wp.ezhomes.co/wp-json/wc/v3';
 
 // Development fallback - only use direct API in development
 const isDevelopment = import.meta.env.DEV;
