@@ -69,6 +69,30 @@ const ProductDetail = () => {
     loadProduct();
   }, [id]);
 
+  // Update selected size when product changes
+  useEffect(() => {
+    if (product?.variants) {
+      const sizes = [...new Set(product.variants.map(v => v.size).filter(Boolean))];
+      if (sizes.length > 0) {
+        setSelectedSize(sizes[0]);
+      }
+    }
+  }, [product?.id]);
+
+  // Add scroll listener to detect when to release sticky image
+  useEffect(() => {
+    const handleScroll = () => {
+      const addToCartSection = document.getElementById('add-to-cart-section');
+      if (addToCartSection) {
+        const rect = addToCartSection.getBoundingClientRect();
+        setIsImageSticky(rect.top > window.innerHeight / 2);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   if (loading || !product) {
     return (
       <Layout>
@@ -88,13 +112,6 @@ const ProductDetail = () => {
 
   // Size selector
   const sizes = product.variants ? [...new Set(product.variants.map(v => v.size).filter(Boolean))] : [];
-  
-  // Update selected size when product changes
-  useEffect(() => {
-    if (sizes.length > 0) {
-      setSelectedSize(sizes[0]);
-    }
-  }, [product?.id]);
 
   // Addons data
   const addons = [
@@ -137,25 +154,6 @@ const ProductDetail = () => {
       [addonId]: Math.max(0, (prev[addonId] || 0) + delta),
     }));
   };
-
-  // Add scroll listener to detect when to release sticky image
-  useEffect(() => {
-    const handleScroll = () => {
-      // Get the add-to-cart button position
-      const addToCartSection = document.getElementById('add-to-cart-section');
-      if (addToCartSection) {
-        const rect = addToCartSection.getBoundingClientRect();
-        // If add-to-cart section is visible (not below viewport), release sticky
-        setIsImageSticky(rect.top > window.innerHeight / 2);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Original addToCart
-  // const { addToCart } = useCart();
 
   return (
     <Layout>
