@@ -7,17 +7,63 @@ import { useCart } from '@/context/CartContext';
 import { ProductSpecsAccordion } from "@/components/ProductSpecsAccordion";
 import { ProductReviews } from "@/components/ProductReviews";
 import { products, formatPrice, calculateDiscount } from "@/data/products";
+import type { Product } from "@/data/products";
+import { fetchProduct } from "@/services/woocommerce";
+import { transformWCProduct } from "@/utils/productTransformer";
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const product = products.find(p => p.id === id) || products[0];
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
   
   const [selectedVariant, setSelectedVariant] = useState(0);
   const [selectedImage, setSelectedImage] = useState(0);
   const [addonQuantities, setAddonQuantities] = useState<Record<string, number>>({});
   const [isImageSticky, setIsImageSticky] = useState(true);
+
+  // Fetch product from WooCommerce
+  useEffect(() => {
+    async function loadProduct() {
+      if (!id) return;
+      
+      try {
+        setLoading(true);
+        const wcProduct = await fetchProduct(parseInt(id));
+        
+        if (wcProduct) {
+          const transformedProduct = transformWCProduct(wcProduct);
+          setProduct(transformedProduct);
+        } else {
+          // Fallback to hardcoded products
+          const fallbackProduct = products.find(p => p.id === id) || products[0];
+          setProduct(fallbackProduct);
+        }
+      } catch (error) {
+        console.error('Failed to load product:', error);
+        // Fallback to hardcoded products
+        const fallbackProduct = products.find(p => p.id === id) || products[0];
+        setProduct(fallbackProduct);
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    loadProduct();
+  }, [id]);
+
+  if (loading || !product) {
+    return (
+      <Layout>
+        <div className="container mx-auto px-6 py-20">
+          <div className="flex items-center justify-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   // Prefer externalImage when available, fall back to local images
   const primaryImage = product.externalImage ?? product.images[0];
