@@ -189,11 +189,6 @@ const ProductDetail = () => {
                       alt={`${product.title} view ${idx + 1}`}
                       className="w-full h-full object-cover"
                     />
-                    {idx === 3 && (
-                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                        <Play className="w-6 h-6 text-white fill-white" />
-                      </div>
-                    )}
                   </button>
                 ))}
               </div>
