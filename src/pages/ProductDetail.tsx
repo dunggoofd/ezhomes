@@ -66,12 +66,12 @@ const ProductDetail = () => {
   }
 
   // Prefer externalImage when available, fall back to local images
-  const primaryImage = product.externalImage ?? product.images[0];
+  const primaryImage = product.externalImage ?? product.images[0] ?? 'https://placehold.co/600x800?text=No+Image';
   // Use full product.images array as gallery (which now contains external images)
   const galleryImages = product.images.length > 0 ? product.images : [primaryImage];
 
   // Size selector
-  const sizes = [...new Set(product.variants.map(v => v.size).filter(Boolean))];
+  const sizes = product.variants ? [...new Set(product.variants.map(v => v.size).filter(Boolean))] : [];
   const [selectedSize, setSelectedSize] = useState(sizes[0] || "180cm");
 
   // Addons data
