@@ -15,11 +15,13 @@ import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { addToCart } = useCart();
+  
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
-  
   const [selectedVariant, setSelectedVariant] = useState(0);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [selectedSize, setSelectedSize] = useState("180cm");
   const [addonQuantities, setAddonQuantities] = useState<Record<string, number>>({});
   const [isImageSticky, setIsImageSticky] = useState(true);
 
@@ -86,7 +88,13 @@ const ProductDetail = () => {
 
   // Size selector
   const sizes = product.variants ? [...new Set(product.variants.map(v => v.size).filter(Boolean))] : [];
-  const [selectedSize, setSelectedSize] = useState(sizes[0] || "180cm");
+  
+  // Update selected size when product changes
+  useEffect(() => {
+    if (sizes.length > 0) {
+      setSelectedSize(sizes[0]);
+    }
+  }, [product?.id]);
 
   // Addons data
   const addons = [
@@ -129,8 +137,6 @@ const ProductDetail = () => {
       [addonId]: Math.max(0, (prev[addonId] || 0) + delta),
     }));
   };
-
-  const { addToCart } = useCart();
 
   // Add scroll listener to detect when to release sticky image
   useEffect(() => {
