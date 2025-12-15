@@ -33,6 +33,13 @@ export const CartPanel = ({ open, onClose }: CartPanelProps) => {
               </span>
             </SheetTitle>
           </div>
+        </SheetHeader>
+        {/* Trust Badges */}
+        <div className="px-6 py-3 bg-green-50 border-b border-green-100">
+          <div className="flex items-center justify-around text-xs">
+            <div className="flex items-center gap-1 text-green-700">
+              <div className="w-5 h-5 bg-green-600 rounded-full flex items-center justify-center">
+                <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
               </div>
@@ -46,7 +53,6 @@ export const CartPanel = ({ open, onClose }: CartPanelProps) => {
               </div>
               <span className="font-medium">Free Shipping</span>
             </div>
-
           </div>
         </div>
 
