@@ -8,7 +8,7 @@ import { ProductSpecsAccordion } from "@/components/ProductSpecsAccordion";
 import { ProductReviews } from "@/components/ProductReviews";
 import { products, formatPrice, calculateDiscount } from "@/data/products";
 import type { Product } from "@/data/products";
-import { fetchProduct } from "@/services/woocommerce";
+import { fetchProduct, fetchProductBySlug } from "@/services/woocommerce";
 import { transformWCProduct } from "@/utils/productTransformer";
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 
@@ -25,7 +25,7 @@ const ProductDetail = () => {
   const [addonQuantities, setAddonQuantities] = useState<Record<string, number>>({});
   const [isImageSticky, setIsImageSticky] = useState(true);
 
-  // Fetch product by slug
+  // Fetch product by slug (prefer WooCommerce, fallback to local)
   useEffect(() => {
     async function loadProduct() {
       if (!slug) {
@@ -33,22 +33,18 @@ const ProductDetail = () => {
         setLoading(false);
         return;
       }
-      
       console.log('Loading product:', slug);
-      
       try {
         setLoading(true);
-        // Try to find product by slug in local products
-        let foundProduct = products.find(p => p.slug === slug);
-        if (!foundProduct) {
-          // Optionally, fetch from WooCommerce by slug if needed
-          // const wcProduct = await fetchProductBySlug(slug);
-          // if (wcProduct) foundProduct = transformWCProduct(wcProduct);
-        }
-        if (foundProduct) {
-          setProduct(foundProduct);
+        // Try to fetch from WooCommerce by slug
+        const wcProduct = await fetchProductBySlug(slug);
+        if (wcProduct) {
+          const transformed = transformWCProduct(wcProduct);
+          setProduct(transformed);
         } else {
-          setProduct(products[0]);
+          // Fallback to hardcoded products
+          let foundProduct = products.find(p => p.slug === slug);
+          setProduct(foundProduct || products[0]);
         }
       } catch (error) {
         console.error('Failed to load product:', error);

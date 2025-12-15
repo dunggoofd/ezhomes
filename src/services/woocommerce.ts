@@ -1,3 +1,29 @@
+// Fetch WooCommerce product by slug
+export async function fetchProductBySlug(slug: string): Promise<WCProduct | null> {
+  try {
+    let response;
+    if (isDevelopment) {
+      // Direct API call in development
+      const url = addAuthParams(`${WC_API_URL}/products?slug=${slug}`);
+      response = await fetch(url);
+    } else {
+      // Use proxy in production
+      response = await fetch(API_PROXY, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          endpoint: `/products?slug=${slug}`,
+          method: 'GET',
+        }),
+      });
+    }
+    if (!response.ok) return null;
+    const data = await response.json();
+    return Array.isArray(data) && data.length > 0 ? data[0] : null;
+  } catch {
+    return null;
+  }
+}
 // WooCommerce API Service
 // Using serverless function proxy to keep API keys secure
 const API_PROXY = '/api/woocommerce';
