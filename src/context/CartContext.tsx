@@ -18,6 +18,9 @@ type CartContextType = {
   clearCart: () => void;
   updateQuantity: (id: string, qty: number) => void;
   subtotal: number;
+  isCartOpen: boolean;
+  openCart: () => void;
+  closeCart: () => void;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -33,6 +36,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return [];
     }
   });
+  
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   useEffect(() => {
     try {
@@ -70,6 +75,9 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         },
       ];
     });
+    
+    // Open cart panel when item is added
+    setIsCartOpen(true);
   };
 
   const removeFromCart = (id: string) => {
@@ -81,11 +89,14 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const updateQuantity = (id: string, qty: number) => {
     setItems(prev => prev.map(i => i.id === id ? { ...i, quantity: Math.max(0, qty) } : i).filter(i => i.quantity > 0));
   };
+  
+  const openCart = () => setIsCartOpen(true);
+  const closeCart = () => setIsCartOpen(false);
 
   const subtotal = items.reduce((s, i) => s + i.price * i.quantity, 0);
 
   return (
-    <CartContext.Provider value={{ items, addToCart, removeFromCart, clearCart, updateQuantity, subtotal }}>
+    <CartContext.Provider value={{ items, addToCart, removeFromCart, clearCart, updateQuantity, subtotal, isCartOpen, openCart, closeCart }}>
       {children}
     </CartContext.Provider>
   );
