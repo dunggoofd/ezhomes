@@ -269,6 +269,15 @@ const CheckoutContent = () => {
     const isPickup = formData.deliveryMethod === "pickup";
     const isBankTransfer = paymentMethod === "bank_transfer";
     
+    // Auto-redirect to shop after 5 seconds
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        navigate("/shop");
+      }, 5000);
+      
+      return () => clearTimeout(timer);
+    }, [navigate]);
+    
     return (
       <Layout>
         <div className="container mx-auto px-4 py-12 md:py-16">
@@ -436,12 +445,14 @@ const CheckoutContent = () => {
                   📧 A confirmation email has been sent to
                 </p>
                 <p className="font-semibold text-lg">{formData.email}</p>
+                <p className="text-sm text-muted-foreground mt-3">
+                  Redirecting to shop in a few seconds...
+                </p>
               </div>
               
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Button 
                   onClick={() => navigate("/shop")} 
-                  variant="outline"
                   size="lg"
                   className="min-w-[200px]"
                 >
@@ -449,6 +460,7 @@ const CheckoutContent = () => {
                 </Button>
                 <Button 
                   onClick={() => navigate("/")}
+                  variant="outline"
                   size="lg"
                   className="min-w-[200px]"
                 >
