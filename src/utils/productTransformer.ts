@@ -5,20 +5,23 @@ import type { Product } from '@/data/products';
  * Transform WooCommerce product to our app's product format
  */
 export function transformWCProduct(wcProduct: WCProduct): Product {
+  // Force HTTP for WordPress images due to SSL issues
+  const fixImageUrl = (url: string) => url.replace('https://wp.ezhomes.co', 'http://wp.ezhomes.co');
+  
   return {
     id: wcProduct.id.toString(),
     title: wcProduct.name,
     description: wcProduct.short_description || wcProduct.description,
     price: parseFloat(wcProduct.price) || 0,
     compareAtPrice: wcProduct.sale_price ? parseFloat(wcProduct.regular_price) : undefined,
-    images: wcProduct.images.map(img => img.src),
+    images: wcProduct.images.map(img => fixImageUrl(img.src)),
     rating: parseFloat(wcProduct.average_rating) || 4.5,
     reviewCount: wcProduct.rating_count || 0,
     variants: extractVariants(wcProduct),
     badges: extractBadges(wcProduct),
     category: wcProduct.categories[0]?.name || 'Uncategorized',
     externalUrl: `https://ezhomes.co/product/${wcProduct.id}`,
-    externalImage: wcProduct.images[0]?.src || '',
+    externalImage: fixImageUrl(wcProduct.images[0]?.src || ''),
     // Don't include colorVariants for WooCommerce products to avoid linking issues
     colorVariants: undefined,
   };
