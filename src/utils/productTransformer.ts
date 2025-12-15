@@ -32,17 +32,9 @@ export function transformWCProduct(wcProduct: WCProduct): Product {
     description: wcProduct.short_description || wcProduct.description,
     price: parseFloat(wcProduct.price) || 0,
     compareAtPrice: wcProduct.sale_price ? parseFloat(wcProduct.regular_price) : undefined,
-    images: (() => {
-      const imgArr = (wcProduct.images && wcProduct.images.length > 0)
-        ? wcProduct.images.map(img => fixImageUrl(img.src))
-        : ["https://placehold.co/600x800?text=No+Image"];
-      // Always include externalImage as the first image if not already present
-      const extImg = fixImageUrl(wcProduct.images?.[0]?.src || "");
-      if (extImg && imgArr[0] !== extImg) {
-        return [extImg, ...imgArr];
-      }
-      return imgArr;
-    })(),
+    images: (wcProduct.images && wcProduct.images.length > 0)
+      ? wcProduct.images.map(img => (img.src ? `/api/image-proxy?url=${encodeURIComponent(img.src)}` : "https://placehold.co/600x800?text=No+Image"))
+      : ["https://placehold.co/600x800?text=No+Image"],
     rating,
     reviewCount,
     variants: extractVariants(wcProduct),
