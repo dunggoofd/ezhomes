@@ -65,6 +65,17 @@ const CheckoutContent = () => {
     }
   }, [items.length, total, formData.firstName, clientSecret]);
 
+  // Auto-redirect to shop after order completion
+  useEffect(() => {
+    if (orderComplete) {
+      const timer = setTimeout(() => {
+        navigate("/shop");
+      }, 5000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [orderComplete, navigate]);
+
   // Validation
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -268,15 +279,6 @@ const CheckoutContent = () => {
   if (orderComplete) {
     const isPickup = formData.deliveryMethod === "pickup";
     const isBankTransfer = paymentMethod === "bank_transfer";
-    
-    // Auto-redirect to shop after 5 seconds
-    useEffect(() => {
-      const timer = setTimeout(() => {
-        navigate("/shop");
-      }, 5000);
-      
-      return () => clearTimeout(timer);
-    }, [navigate]);
     
     return (
       <Layout>
