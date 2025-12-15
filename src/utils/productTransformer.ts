@@ -33,7 +33,7 @@ export function transformWCProduct(wcProduct: WCProduct): Product {
     price: parseFloat(wcProduct.price) || 0,
     compareAtPrice: wcProduct.sale_price ? parseFloat(wcProduct.regular_price) : undefined,
     images: (wcProduct.images && wcProduct.images.length > 0)
-      ? wcProduct.images.map(img => (img.src ? `/api/image-proxy?url=${encodeURIComponent(img.src)}` : "https://placehold.co/600x800?text=No+Image"))
+      ? wcProduct.images.map(img => (img.src ? img.src.replace(/^http:/, 'https:') : "https://placehold.co/600x800?text=No+Image"))
       : ["https://placehold.co/600x800?text=No+Image"],
     rating,
     reviewCount,
