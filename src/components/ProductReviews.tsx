@@ -26,6 +26,15 @@ interface Review {
   images?: string[];
 }
 
+interface ProductReviewsProps {
+  product?: {
+    id: string;
+    title: string;
+    name?: string;
+    images?: string[];
+  };
+}
+
 const mockReviews: Review[] = [
   {
     id: "1",
@@ -98,15 +107,30 @@ const ratingBreakdown = {
   ],
 };
 
-export const ProductReviews = () => {
+export const ProductReviews = ({ product }: ProductReviewsProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const [sortBy, setSortBy] = useState("recent");
 
+  // Only show reviews for this product (by name/title)
   const filteredReviews = mockReviews
     .filter((review) => {
+      // Match by product name/title if product is provided
+      if (product && review.productName && product.title) {
+        if (
+          review.productName.toLowerCase() !== product.title.toLowerCase() &&
+          review.productName.toLowerCase() !== product.name?.toLowerCase()
+        ) {
+          return false;
+        }
+      }
       if (selectedRating && review.rating !== selectedRating) return false;
-      if (searchQuery && !review.content.toLowerCase().includes(searchQuery.toLowerCase()) && !review.title.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+      if (
+        searchQuery &&
+        !review.content.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        !review.title.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+        return false;
       return true;
     })
     .sort((a, b) => {
@@ -293,10 +317,20 @@ export const ProductReviews = () => {
                   {review.content}
                 </p>
 
-                {/* Review Images */}
-                {review.images && review.images.length > 0 && (
+                {/* Review Images: show review images if present, else fallback to product images */}
+                {(review.images && review.images.length > 0
+                  ? review.images
+                  : product?.images && product.images.length > 0
+                  ? product.images.slice(0, 1)
+                  : [])
+                  .length > 0 && (
                   <div className="flex gap-2 mb-4">
-                    {review.images.map((img, idx) => (
+                    {(review.images && review.images.length > 0
+                      ? review.images
+                      : product?.images && product.images.length > 0
+                      ? product.images.slice(0, 1)
+                      : []
+                    ).map((img, idx) => (
                       <img
                         key={idx}
                         src={img}

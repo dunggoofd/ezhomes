@@ -368,7 +368,7 @@ const CheckoutContent = () => {
                         </Button>
                       </a>
                       <a
-                        href="tel:+61XXXXXXXXXX"
+                        href="tel:+61433267319"
                         className="flex-1"
                       >
                         <Button variant="outline" className="w-full bg-white hover:bg-blue-50 border-blue-300 text-blue-700">
@@ -398,19 +398,19 @@ const CheckoutContent = () => {
                     <div className="grid grid-cols-2 gap-3">
                       <div>
                         <p className="text-amber-700 font-medium">Bank:</p>
-                        <p className="text-amber-900">[Your Bank Name]</p>
+                        <p className="text-amber-900">Star Chef Equipment PTY LTD</p>
                       </div>
                       <div>
                         <p className="text-amber-700 font-medium">Account Name:</p>
-                        <p className="text-amber-900">EZ Homes</p>
+                        <p className="text-amber-900">Star Chef Equipment PTY LTD</p>
                       </div>
                       <div>
                         <p className="text-amber-700 font-medium">BSB:</p>
-                        <p className="text-amber-900">[Your BSB]</p>
+                        <p className="text-amber-900">124-005</p>
                       </div>
                       <div>
                         <p className="text-amber-700 font-medium">Account Number:</p>
-                        <p className="text-amber-900">[Your Account]</p>
+                        <p className="text-amber-900">22646239</p>
                       </div>
                     </div>
                     <div className="pt-3 mt-3 border-t border-amber-200">
@@ -575,7 +575,7 @@ const CheckoutContent = () => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      placeholder="john@example.com"
+                      placeholder="ezhomesinfo@gmail.com"
                       className={errors.email ? "border-red-500" : ""}
                     />
                     {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
@@ -633,7 +633,7 @@ const CheckoutContent = () => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      placeholder="john@example.com"
+                      placeholder="ezhomesinfo@gmail.com"
                       className={errors.email ? "border-red-500" : ""}
                     />
                     {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
@@ -842,8 +842,10 @@ const CheckoutContent = () => {
                     </p>
                     <div className="bg-white p-3 rounded border border-amber-200 space-y-2">
                       <div className="text-xs">
-                        <p className="font-semibold">Bank Details (will be provided)</p>
-                        <p className="text-muted-foreground">Account Name: Star Sofa Studio</p>
+                        <p className="font-semibold">Bank Details</p>
+                        <p className="text-muted-foreground">Account Name: Star Chef Equipment PTY LTD</p>
+                        <p className="text-muted-foreground">BSB: 124-005</p>
+                        <p className="text-muted-foreground">Account Number: 22646239</p>
                         <p className="text-muted-foreground">Reference: Your Order ID</p>
                       </div>
                     </div>

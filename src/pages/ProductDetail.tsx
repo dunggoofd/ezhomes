@@ -443,7 +443,7 @@ const ProductDetail = () => {
         <ProductSpecsAccordion product={product} />
 
         {/* Reviews Section */}
-        <ProductReviews />
+        <ProductReviews product={product} />
       </main>
     </Layout>
   );

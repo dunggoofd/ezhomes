@@ -407,7 +407,7 @@ function ezhomes_customize_register( $wp_customize ) {
     ) );
 
     $wp_customize->add_setting( 'ezhomes_email', array(
-        'default'           => 'hello@ezhomes.com.au',
+        'default'           => 'ezhomesinfo@gmail.com',
         'sanitize_callback' => 'sanitize_email',
     ) );
 

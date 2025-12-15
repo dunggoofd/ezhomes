@@ -288,7 +288,7 @@ const VirtualTour = () => {
                   name="email"
                   value={bookingData.email}
                   onChange={handleBookingChange}
-                  placeholder="john@example.com"
+                  placeholder="ezhomesinfo@gmail.com"
                   className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600"
                   required
                 />

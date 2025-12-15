@@ -108,11 +108,11 @@ export const Footer = () => {
               </div>
               <div className="flex items-center gap-3">
                 <Phone className="h-4 w-4" />
-                <span>1800 EZHOMES</span>
+                <span>+61433267318</span>
               </div>
               <div className="flex items-center gap-3">
                 <Mail className="h-4 w-4" />
-                <span>hello@ezhomes.com.au</span>
+                <span>ezhomesinfo@gmail.com</span>
               </div>
             </div>
           </div>
