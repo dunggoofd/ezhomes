@@ -271,75 +271,187 @@ const CheckoutContent = () => {
     
     return (
       <Layout>
-        <div className="container mx-auto px-4 py-16">
-          <div className="max-w-2xl mx-auto space-y-8">
+        <div className="container mx-auto px-4 py-12 md:py-16">
+          <div className="max-w-4xl mx-auto space-y-8">
+            {/* Success Header */}
             <div className="text-center space-y-6">
               <div className="flex justify-center">
-                <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center">
-                  <Check className="w-12 h-12 text-green-600" />
+                <div className="w-20 h-20 md:w-24 md:h-24 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-lg">
+                  <Check className="w-10 h-10 md:w-12 md:h-12 text-white" strokeWidth={3} />
                 </div>
               </div>
-              <h1 className="text-4xl font-bold">Order Confirmed!</h1>
-              <p className="text-xl text-muted-foreground">
-                {isPickup ? "Your order is ready for pickup" : "Thank you for your order"}
-              </p>
+              <div>
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-2">Order Confirmed!</h1>
+                <p className="text-lg md:text-xl text-muted-foreground">
+                  {isPickup ? "Your order is ready for pickup" : "Thank you for your order"}
+                </p>
+              </div>
             </div>
 
-            <div className="bg-muted/50 border rounded-lg p-6 space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="font-semibold text-lg">Order #{completedOrderId}</span>
-                <span className="text-2xl font-bold">{formatPrice(total)}</span>
+            {/* Order Summary Card */}
+            <div className="bg-card border border-border rounded-xl shadow-sm p-6 md:p-8 space-y-6">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 pb-4 border-b">
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1">Order Number</p>
+                  <p className="font-semibold text-2xl">#{completedOrderId}</p>
+                </div>
+                <div className="text-left sm:text-right">
+                  <p className="text-sm text-muted-foreground mb-1">Total Amount</p>
+                  <p className="text-3xl font-bold text-primary">{formatPrice(total)}</p>
+                </div>
               </div>
-              <Separator />
-              <div className="space-y-2 text-sm">
-                <p><strong>Email:</strong> {formData.email}</p>
-                <p><strong>Phone:</strong> {formData.phone}</p>
-                {isPickup && (
-                  <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                    <div className="flex items-start gap-2">
-                      <MapPin className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+
+              {/* Contact Info */}
+              <div className="grid sm:grid-cols-2 gap-4 text-sm">
+                <div>
+                  <p className="text-muted-foreground mb-1">Email</p>
+                  <p className="font-medium">{formData.email}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground mb-1">Phone</p>
+                  <p className="font-medium">{formData.phone}</p>
+                </div>
+              </div>
+
+              {/* Pickup Location - Enhanced */}
+              {isPickup && (
+                <div className="mt-6 bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl overflow-hidden">
+                  <div className="p-6 space-y-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center">
+                        <MapPin className="w-6 h-6 text-white" />
+                      </div>
                       <div>
-                        <p className="font-semibold text-blue-900">Pickup Location:</p>
-                        <p className="text-blue-800">U14, 157 North Road Woodridge</p>
-                        <p className="text-blue-800">Brisbane, Queensland 4114, Australia</p>
-                        <p className="mt-2 text-sm text-blue-700">Ready within 5-7 business days</p>
+                        <h3 className="font-bold text-lg text-blue-900">Pickup Location</h3>
+                        <p className="text-sm text-blue-700">Ready within 5-7 business days</p>
                       </div>
                     </div>
-                  </div>
-                )}
-                {isBankTransfer && !isPickup && (
-                  <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg space-y-3">
-                    <div className="flex items-start gap-2">
-                      <Landmark className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                      <div className="flex-1">
-                        <p className="font-semibold text-amber-900">Bank Transfer Details:</p>
-                        <div className="mt-2 space-y-1 text-sm text-amber-800">
-                          <p><strong>Bank:</strong> [Your Bank Name]</p>
-                          <p><strong>Account Name:</strong> EZ Homes</p>
-                          <p><strong>BSB:</strong> [Your BSB]</p>
-                          <p><strong>Account Number:</strong> [Your Account]</p>
-                          <p><strong>Reference:</strong> Order #{completedOrderId}</p>
-                        </div>
-                        <p className="mt-3 text-sm text-amber-700">
-                          Please include your order number in the transfer reference. 
-                          Your order will be processed once payment is received.
-                        </p>
+                    
+                    <div className="bg-white/80 rounded-lg p-4 space-y-2">
+                      <p className="font-semibold text-blue-900">EZ Homes Warehouse</p>
+                      <p className="text-blue-800">U14, 157 North Road Woodridge</p>
+                      <p className="text-blue-800">Brisbane, Queensland 4114</p>
+                      <p className="text-blue-800">Australia</p>
+                      
+                      <div className="pt-3 mt-3 border-t border-blue-200">
+                        <p className="text-sm font-medium text-blue-900 mb-2">Opening Hours:</p>
+                        <p className="text-sm text-blue-700">Monday - Friday: 9:00 AM - 5:00 PM</p>
+                        <p className="text-sm text-blue-700">Saturday: 10:00 AM - 3:00 PM</p>
+                        <p className="text-sm text-blue-700">Sunday: Closed</p>
                       </div>
                     </div>
+
+                    {/* Map */}
+                    <div className="rounded-lg overflow-hidden border-2 border-white shadow-md">
+                      <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3540.573247299273!2d153.11089!3d-27.62818!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b915078b4c3b8c9%3A0x8c9c9c9c9c9c9c9c!2s157%20North%20Rd%2C%20Woodridge%20QLD%204114!5e0!3m2!1sen!2sau!4v1234567890"
+                        width="100%"
+                        height="200"
+                        style={{ border: 0 }}
+                        allowFullScreen
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        className="w-full"
+                      ></iframe>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <a
+                        href="https://www.google.com/maps/dir//157+North+Rd+Woodridge+QLD+4114"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1"
+                      >
+                        <Button variant="outline" className="w-full bg-white hover:bg-blue-50 border-blue-300 text-blue-700">
+                          <MapPin className="w-4 h-4 mr-2" />
+                          Get Directions
+                        </Button>
+                      </a>
+                      <a
+                        href="tel:+61XXXXXXXXXX"
+                        className="flex-1"
+                      >
+                        <Button variant="outline" className="w-full bg-white hover:bg-blue-50 border-blue-300 text-blue-700">
+                          <Smartphone className="w-4 h-4 mr-2" />
+                          Call Us
+                        </Button>
+                      </a>
+                    </div>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
+
+              {/* Bank Transfer Info */}
+              {isBankTransfer && !isPickup && (
+                <div className="mt-6 bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-200 rounded-xl p-6 space-y-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-amber-600 rounded-full flex items-center justify-center">
+                      <Landmark className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg text-amber-900">Bank Transfer Details</h3>
+                      <p className="text-sm text-amber-700">Complete payment to process your order</p>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-white/80 rounded-lg p-4 space-y-2 text-sm">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <p className="text-amber-700 font-medium">Bank:</p>
+                        <p className="text-amber-900">[Your Bank Name]</p>
+                      </div>
+                      <div>
+                        <p className="text-amber-700 font-medium">Account Name:</p>
+                        <p className="text-amber-900">EZ Homes</p>
+                      </div>
+                      <div>
+                        <p className="text-amber-700 font-medium">BSB:</p>
+                        <p className="text-amber-900">[Your BSB]</p>
+                      </div>
+                      <div>
+                        <p className="text-amber-700 font-medium">Account Number:</p>
+                        <p className="text-amber-900">[Your Account]</p>
+                      </div>
+                    </div>
+                    <div className="pt-3 mt-3 border-t border-amber-200">
+                      <p className="text-amber-700 font-medium">Reference:</p>
+                      <p className="text-lg font-bold text-amber-900">Order #{completedOrderId}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-amber-100 rounded-lg p-3">
+                    <p className="text-sm text-amber-800">
+                      <strong>Important:</strong> Please include your order number in the transfer reference. 
+                      Your order will be processed once payment is received.
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
 
-            <div className="text-center space-y-4">
-              <p className="text-sm text-muted-foreground">
-                A confirmation email has been sent to <strong>{formData.email}</strong>
-              </p>
-              <div className="flex gap-4 justify-center">
-                <Button onClick={() => navigate("/shop")} variant="outline">
+            {/* Confirmation Message & Actions */}
+            <div className="text-center space-y-6">
+              <div className="bg-muted/30 border rounded-lg p-6">
+                <p className="text-muted-foreground mb-1">
+                  📧 A confirmation email has been sent to
+                </p>
+                <p className="font-semibold text-lg">{formData.email}</p>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Button 
+                  onClick={() => navigate("/shop")} 
+                  variant="outline"
+                  size="lg"
+                  className="min-w-[200px]"
+                >
                   Continue Shopping
                 </Button>
-                <Button onClick={() => navigate("/")}>
+                <Button 
+                  onClick={() => navigate("/")}
+                  size="lg"
+                  className="min-w-[200px]"
+                >
                   Back to Home
                 </Button>
               </div>
