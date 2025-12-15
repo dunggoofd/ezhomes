@@ -32,7 +32,9 @@ export function transformWCProduct(wcProduct: WCProduct): Product {
     description: wcProduct.short_description || wcProduct.description,
     price: parseFloat(wcProduct.price) || 0,
     compareAtPrice: wcProduct.sale_price ? parseFloat(wcProduct.regular_price) : undefined,
-    images: wcProduct.images.map(img => fixImageUrl(img.src)),
+    images: (wcProduct.images && wcProduct.images.length > 0)
+      ? wcProduct.images.map(img => fixImageUrl(img.src))
+      : ["https://placehold.co/600x800?text=No+Image"],
     rating,
     reviewCount,
     variants: extractVariants(wcProduct),

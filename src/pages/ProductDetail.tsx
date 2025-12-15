@@ -97,9 +97,11 @@ const ProductDetail = () => {
   }
 
   // Prefer externalImage when available, fall back to local images
-  const primaryImage = product.externalImage ?? product.images[0] ?? 'https://placehold.co/600x800?text=No+Image';
+  const primaryImage = product.externalImage ?? (product.images && product.images[0]) ?? 'https://placehold.co/600x800?text=No+Image';
   // Use full product.images array as gallery (which now contains external images)
-  const galleryImages = product.images.length > 0 ? product.images : [primaryImage];
+  const galleryImages = (product.images && product.images.length > 0) ? product.images : [primaryImage];
+  // Debug: log gallery images
+  console.log('Product gallery images:', galleryImages);
 
   // Size selector
   const sizes = product.variants ? [...new Set(product.variants.map(v => v.size).filter(Boolean))] : [];
