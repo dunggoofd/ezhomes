@@ -25,6 +25,7 @@ const CheckoutContent = () => {
   const elements = useElements();
   const [loading, setLoading] = useState(false);
   const [orderComplete, setOrderComplete] = useState(false);
+  const [completedOrderId, setCompletedOrderId] = useState<number | null>(null);
   const [paymentError, setPaymentError] = useState("");
   const [clientSecret, setClientSecret] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<"card" | "apple_pay" | "google_pay" | "bank_transfer">("card");
@@ -214,26 +215,30 @@ const CheckoutContent = () => {
 
       // For pickup orders, order is complete (pay on pickup)
       if (formData.deliveryMethod === "pickup") {
+        setCompletedOrderId(order.id);
         setOrderComplete(true);
         clearCart();
         toast.success(`Order #${order.id} placed successfully!`);
-
-        // Redirect after 4 seconds
-        setTimeout(() => {
-          navigate("/shop");
-        }, 4000);
+        setLoading(false);
         return;
       }
 
-      // For shipping orders, redirect to WooCommerce payment page
-      toast.success("Order created! Redirecting to secure payment...");
+      // For bank transfer, show instructions
+      if (paymentMethod === "bank_transfer") {
+        setCompletedOrderId(order.id);
+        setOrderComplete(true);
+        clearCart();
+        toast.success(`Order #${order.id} created! Please complete bank transfer.`);
+        setLoading(false);
+        return;
+      }
+
+      // For card payments, continue with Stripe (to be implemented with real Stripe keys)
+      toast.success("Order created! Card payment coming soon...");
+      setCompletedOrderId(order.id);
+      setOrderComplete(true);
+      clearCart();
       setLoading(false);
-      
-      // Small delay before redirect for better UX
-      setTimeout(() => {
-        // Redirect to WordPress checkout for payment with WooPayments
-        window.location.href = `https://wp.ezhomes.co/checkout/order-pay/${order.id}/?pay_for_order=true&key=${order.order_key}`;
-      }, 1500);
 
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Order creation failed";
@@ -261,25 +266,83 @@ const CheckoutContent = () => {
   }
 
   if (orderComplete) {
+    const isPickup = formData.deliveryMethod === "pickup";
+    const isBankTransfer = paymentMethod === "bank_transfer";
+    
     return (
       <Layout>
         <div className="container mx-auto px-4 py-16">
-          <div className="max-w-2xl mx-auto text-center space-y-6">
-            <div className="flex justify-center">
-              <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center">
-                <Check className="w-12 h-12 text-green-600" />
+          <div className="max-w-2xl mx-auto space-y-8">
+            <div className="text-center space-y-6">
+              <div className="flex justify-center">
+                <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center">
+                  <Check className="w-12 h-12 text-green-600" />
+                </div>
+              </div>
+              <h1 className="text-4xl font-bold">Order Confirmed!</h1>
+              <p className="text-xl text-muted-foreground">
+                {isPickup ? "Your order is ready for pickup" : "Thank you for your order"}
+              </p>
+            </div>
+
+            <div className="bg-muted/50 border rounded-lg p-6 space-y-4">
+              <div className="flex justify-between items-center">
+                <span className="font-semibold text-lg">Order #{completedOrderId}</span>
+                <span className="text-2xl font-bold">{formatPrice(total)}</span>
+              </div>
+              <Separator />
+              <div className="space-y-2 text-sm">
+                <p><strong>Email:</strong> {formData.email}</p>
+                <p><strong>Phone:</strong> {formData.phone}</p>
+                {isPickup && (
+                  <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div className="flex items-start gap-2">
+                      <MapPin className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="font-semibold text-blue-900">Pickup Location:</p>
+                        <p className="text-blue-800">U14, 157 North Road Woodridge</p>
+                        <p className="text-blue-800">Brisbane, Queensland 4114, Australia</p>
+                        <p className="mt-2 text-sm text-blue-700">Ready within 5-7 business days</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {isBankTransfer && !isPickup && (
+                  <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg space-y-3">
+                    <div className="flex items-start gap-2">
+                      <Landmark className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                      <div className="flex-1">
+                        <p className="font-semibold text-amber-900">Bank Transfer Details:</p>
+                        <div className="mt-2 space-y-1 text-sm text-amber-800">
+                          <p><strong>Bank:</strong> [Your Bank Name]</p>
+                          <p><strong>Account Name:</strong> EZ Homes</p>
+                          <p><strong>BSB:</strong> [Your BSB]</p>
+                          <p><strong>Account Number:</strong> [Your Account]</p>
+                          <p><strong>Reference:</strong> Order #{completedOrderId}</p>
+                        </div>
+                        <p className="mt-3 text-sm text-amber-700">
+                          Please include your order number in the transfer reference. 
+                          Your order will be processed once payment is received.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
-            <h1 className="text-4xl font-bold">Order Confirmed</h1>
-            <p className="text-xl text-muted-foreground">Thank you for your purchase!</p>
-            <div className="bg-muted p-6 rounded-lg space-y-2">
-              <p className="font-semibold">Order Total: {formatPrice(total)}</p>
+
+            <div className="text-center space-y-4">
               <p className="text-sm text-muted-foreground">
-                A confirmation email has been sent to {formData.email}
+                A confirmation email has been sent to <strong>{formData.email}</strong>
               </p>
-              <p className="text-sm text-muted-foreground">
-                You will be redirected to the shop in a few moments...
-              </p>
+              <div className="flex gap-4 justify-center">
+                <Button onClick={() => navigate("/shop")} variant="outline">
+                  Continue Shopping
+                </Button>
+                <Button onClick={() => navigate("/")}>
+                  Back to Home
+                </Button>
+              </div>
             </div>
           </div>
         </div>
