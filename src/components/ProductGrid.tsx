@@ -17,7 +17,13 @@ export const ProductGrid = () => {
         // Use WooCommerce products if available, otherwise use fallback
         if (wcProducts && wcProducts.length > 0) {
           const transformedProducts = wcProducts.map(transformWCProduct);
-          setProducts(transformedProducts);
+          // Filter to show only sofas (products with "sofa" or "corduroy" or "flannel" in name)
+          const sofaProducts = transformedProducts.filter(p => 
+            p.title.toLowerCase().includes('sofa') || 
+            p.title.toLowerCase().includes('corduroy') || 
+            p.title.toLowerCase().includes('flannel')
+          );
+          setProducts(sofaProducts.length > 0 ? sofaProducts : transformedProducts);
         } else {
           console.log('No WooCommerce products found, using fallback products');
           setProducts(fallbackProducts);
