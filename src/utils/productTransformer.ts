@@ -5,10 +5,11 @@ import type { Product } from '@/data/products';
  * Transform WooCommerce product to our app's product format
  */
 export function transformWCProduct(wcProduct: WCProduct): Product {
-  // Force HTTP for WordPress images until proper SSL certificate is installed
+  // Proxy images through our serverless function to handle HTTPS/SSL issues
   const fixImageUrl = (url: string) => {
     if (!url) return '';
-    return url.replace('https://wp.ezhomes.co', 'http://wp.ezhomes.co');
+    // Route through image proxy to serve over HTTPS
+    return `/api/image-proxy?url=${encodeURIComponent(url)}`;
   };
   
   // Assign consistent ratings based on product type
