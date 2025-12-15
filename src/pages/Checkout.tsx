@@ -65,17 +65,6 @@ const CheckoutContent = () => {
     }
   }, [items.length, total, formData.firstName, clientSecret]);
 
-  // Auto-redirect to shop after order completion
-  useEffect(() => {
-    if (orderComplete) {
-      const timer = setTimeout(() => {
-        navigate("/shop");
-      }, 5000);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [orderComplete, navigate]);
-
   // Validation
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -447,9 +436,6 @@ const CheckoutContent = () => {
                   📧 A confirmation email has been sent to
                 </p>
                 <p className="font-semibold text-lg">{formData.email}</p>
-                <p className="text-sm text-muted-foreground mt-3">
-                  Redirecting to shop in a few seconds...
-                </p>
               </div>
               
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
