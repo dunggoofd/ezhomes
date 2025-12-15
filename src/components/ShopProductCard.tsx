@@ -32,6 +32,8 @@ export const ShopProductCard = ({ product }: ShopProductCardProps) => {
     };
   }, []);
 
+  // Defensive: Don't render product card if slug is missing
+  if (!product.slug) return null;
   return (
     <Link 
       to={`/product/${displayProduct.slug}`}

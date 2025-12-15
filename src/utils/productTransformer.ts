@@ -27,6 +27,7 @@ export function transformWCProduct(wcProduct: WCProduct): Product {
   
   return {
     id: wcProduct.id.toString(),
+    slug: wcProduct.slug || wcProduct.id.toString(),
     title: wcProduct.name,
     description: wcProduct.short_description || wcProduct.description,
     price: parseFloat(wcProduct.price) || 0,

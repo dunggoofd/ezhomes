@@ -48,6 +48,8 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   // Use current images for display
   const images = currentImages;
 
+  // Defensive: Don't render product card if slug is missing
+  if (!product.slug) return null;
   return (
     <div className="group cursor-pointer block active:scale-[0.98] transition-transform">{/* Removed Link wrapper */}
       {/* Image Container */}
@@ -137,7 +139,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         )}
 
         {/* Title */}
-        <Link to={`/product/${product.slug}}">
+        <Link to={`/product/${product.slug}`}>
           <h3 className="text-base md:text-lg font-semibold text-primary mb-1.5 md:mb-2 group-hover:text-accent transition-colors line-clamp-2 leading-snug">
             {product.title}
           </h3>
