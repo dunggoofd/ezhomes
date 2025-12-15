@@ -1,6 +1,32 @@
 import { Mail, Phone, MapPin, Facebook, Instagram, Youtube } from 'lucide-react';
+import { useState, FormEvent } from 'react';
+import { subscribeToNewsletter } from '@/services/klaviyo';
+import { toast } from 'sonner';
 
 export const Footer = () => {
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleNewsletterSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      toast.error('Please enter a valid email address');
+      return;
+    }
+
+    setLoading(true);
+    const result = await subscribeToNewsletter({ email, source: 'Website Footer' });
+    setLoading(false);
+
+    if (result.success) {
+      toast.success(result.message);
+      setEmail('');
+    } else {
+      toast.error(result.message);
+    }
+  };
+
   const footerLinks = {
     shop: [
       { name: 'All Products', href: '/shop' },
@@ -40,17 +66,21 @@ export const Footer = () => {
               Subscribe for exclusive deals, design tips, and new product launches.
             </p>
             
-            <form className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+            <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
               <input 
                 type="email" 
                 placeholder="Enter your email"
-                className="flex-1 bg-primary-foreground/10 border border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/50 px-4 py-3 focus:outline-none focus:border-accent"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={loading}
+                className="flex-1 bg-primary-foreground/10 border border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/50 px-4 py-3 focus:outline-none focus:border-accent disabled:opacity-50"
               />
               <button 
                 type="submit"
-                className="bg-accent text-accent-foreground px-8 py-3 font-semibold hover:bg-accent/90 transition-colors"
+                disabled={loading}
+                className="bg-accent text-accent-foreground px-8 py-3 font-semibold hover:bg-accent/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Subscribe
+                {loading ? 'Subscribing...' : 'Subscribe'}
               </button>
             </form>
           </div>
