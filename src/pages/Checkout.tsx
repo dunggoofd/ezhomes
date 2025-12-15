@@ -551,6 +551,63 @@ const CheckoutContent = () => {
                 )}
               </div>
 
+              {/* Contact Information for Pickup */}
+              {formData.deliveryMethod === "pickup" && (
+                <div className="space-y-4">
+                  <h2 className="text-xl font-semibold">Contact Information</h2>
+                  <Separator />
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">First Name *</label>
+                    <Input
+                      name="firstName"
+                      value={formData.firstName}
+                      onChange={handleChange}
+                      placeholder="John"
+                      className={errors.firstName ? "border-red-500" : ""}
+                    />
+                    {errors.firstName && <p className="text-sm text-red-500">{errors.firstName}</p>}
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Last Name *</label>
+                    <Input
+                      name="lastName"
+                      value={formData.lastName}
+                      onChange={handleChange}
+                      placeholder="Doe"
+                      className={errors.lastName ? "border-red-500" : ""}
+                    />
+                    {errors.lastName && <p className="text-sm text-red-500">{errors.lastName}</p>}
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Email *</label>
+                    <Input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="john@example.com"
+                      className={errors.email ? "border-red-500" : ""}
+                    />
+                    {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Phone *</label>
+                    <Input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      placeholder="0412 345 678"
+                      className={errors.phone ? "border-red-500" : ""}
+                    />
+                    {errors.phone && <p className="text-sm text-red-500">{errors.phone}</p>}
+                  </div>
+                </div>
+              )}
+
               {/* Shipping Information */}
               {formData.deliveryMethod === "shipping" && (
                 <>
