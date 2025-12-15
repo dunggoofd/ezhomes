@@ -161,12 +161,11 @@ const VirtualTour = () => {
           <div className="mb-16">
             <div className="grid lg:grid-cols-2 gap-8 items-center">
               <div className="bg-gray-700 rounded-3xl h-[400px] flex items-center justify-center overflow-hidden">
-                <div className="w-full h-full bg-gradient-to-br from-gray-600 to-gray-800 flex items-center justify-center">
-                  <div className="text-center text-white">
-                    <Play className="h-16 w-16 mx-auto mb-4" />
-                    <p className="text-lg">Virtual Tour Experience</p>
-                  </div>
-                </div>
+                <img
+                  src="/assets/virtual-tour-what-to-expect.jpg"
+                  alt="Virtual tour preview of a modern living room with navigation overlay"
+                  className="object-cover w-full h-full"
+                />
               </div>
               <div className="space-y-4">
                 <h3 className="text-3xl font-bold">
@@ -194,12 +193,11 @@ const VirtualTour = () => {
                 </p>
               </div>
               <div className="order-1 lg:order-2 bg-amber-100 rounded-3xl h-[400px] flex items-center justify-center overflow-hidden">
-                <div className="w-full h-full bg-gradient-to-br from-amber-50 to-amber-200 flex items-center justify-center">
-                  <div className="text-center text-amber-900">
-                    <Play className="h-16 w-16 mx-auto mb-4" />
-                    <p className="text-lg">Product Demo</p>
-                  </div>
-                </div>
+                <img
+                  src="/assets/virtual-tour-live-demo.jpg"
+                  alt="Live demo of sofa on a video call with interactive icons"
+                  className="object-cover w-full h-full"
+                />
               </div>
             </div>
           </div>
@@ -208,12 +206,11 @@ const VirtualTour = () => {
           <div className="mb-16">
             <div className="grid lg:grid-cols-2 gap-8 items-center">
               <div className="bg-gray-100 rounded-3xl h-[400px] flex items-center justify-center overflow-hidden">
-                <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-300 flex items-center justify-center">
-                  <div className="text-center text-gray-800">
-                    <Phone className="h-16 w-16 mx-auto mb-4" />
-                    <p className="text-lg">Q&A Session</p>
-                  </div>
-                </div>
+                <img
+                  src="/assets/virtual-tour-qa.jpg"
+                  alt="Support agent answering questions in real time via chat and video"
+                  className="object-cover w-full h-full"
+                />
               </div>
               <div className="space-y-4">
                 <h3 className="text-3xl font-bold">
