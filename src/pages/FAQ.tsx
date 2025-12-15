@@ -64,7 +64,7 @@ const faqCategories = [
       },
       {
         question: "How do I initiate a return?",
-        answer: "Contact our customer service team via email at ezhomesinfo@gmail.com or call 1300 123 456. We'll arrange for pickup and process your refund within 5-7 business days of receiving the returned item."
+        answer: "Contact our customer service team via email at ezhomesinfo@gmail.com or call +61 433 267 318. We'll arrange for pickup and process your refund within 5-7 business days of receiving the returned item."
       },
       {
         question: "What does the warranty cover?",
@@ -262,14 +262,14 @@ const FAQ = () => {
               </a>
               
               <a 
-                href="tel:1300123456"
+                href="tel:+61433267318"
                 className="bg-background p-6 rounded-xl text-center hover:shadow-md transition-shadow"
               >
                 <div className="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Phone className="h-6 w-6 text-accent-foreground" />
                 </div>
                 <h3 className="font-semibold mb-1">Call Us</h3>
-                <p className="text-sm text-muted-foreground">1300 123 456</p>
+                <p className="text-sm text-muted-foreground">+61433267318</p>
               </a>
               
               <button 

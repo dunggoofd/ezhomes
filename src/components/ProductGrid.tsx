@@ -75,7 +75,7 @@ export const ProductGrid = () => {
             ))
           ) : (
             products.slice(0, 6).map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product.slug} product={product} />
             ))
           )}
         </div>

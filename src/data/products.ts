@@ -6,6 +6,7 @@ import sofaCream4 from "@/assets/products/sofa-cream-4.jpg";
 
 export interface Product {
   id: string;
+  slug: string;
   title: string;
   description: string;
   price: number;
@@ -42,6 +43,7 @@ export interface Product {
 export const products: Product[] = [
   {
     id: "1",
+    slug: "corduroy-flannel-sofa-cream",
     title: "Corduroy & Flannel Sofa Cream",
     description: "Introducing our Corduroy & Flannel sofa – This sleek, ready-to-use sofa blends soft strength with adaptable comfort, designed to elevate any space with ease. Built for flexibility, comfort, and style that fits effortlessly into any room or moment. Our modular sofa can split and transform in numerous ways to suit your needs.",
     price: 899,
@@ -91,6 +93,7 @@ export const products: Product[] = [
   },
   {
     id: "2",
+    slug: "corduroy-flannel-sofa-space-grey",
     title: "Corduroy & Flannel Sofa Space Grey",
     description: "Introducing our Corduroy & Flannel sofa – This sleek, ready-to-use sofa blends soft strength with adaptable comfort, designed to elevate any space with ease. Built for flexibility, comfort, and style that fits effortlessly into any room or moment.",
     price: 899,
@@ -134,6 +137,7 @@ export const products: Product[] = [
   },
   {
     id: "3",
+    slug: "corduroy-flannel-sofa-ocean-blue",
     title: "Corduroy & Flannel Sofa Ocean Blue",
     description: "Introducing our Corduroy & Flannel sofa – This sleek, ready-to-use sofa blends soft strength with adaptable comfort, designed to elevate any space with ease. Built for flexibility, comfort, and style.",
     price: 899,
@@ -215,8 +219,9 @@ export const products: Product[] = [
     externalImage: "https://ezhomes.co/wp-content/uploads/2025/09/7-min.png",
   },
   {
-    id: "5",
-    title: "Corduroy & Flannel Sofa Terracotta Brown",
+    id: "4",
+    slug: "oslo-compression-sofa",
+    title: "Oslo Compression Sofa",
     description: "Introducing our Corduroy & Flannel sofa – This sleek, ready-to-use sofa blends soft strength with adaptable comfort. The warm terracotta brown color adds a cozy touch to any living space.",
     price: 899,
     compareAtPrice: 1199,
@@ -259,8 +264,9 @@ export const products: Product[] = [
     externalImage: "https://ezhomes.co/wp-content/uploads/2025/09/tb5-e1760623051764.jpg",
   },
   {
-    id: "6",
-    title: "Corduroy & Flannel Sofa Sage Green",
+    id: "5",
+    slug: "oslo-compression-sofa-2-0",
+    title: "Oslo Compression Sofa 2.0",
     description: "Introducing our Corduroy & Flannel sofa – This sleek, ready-to-use sofa blends soft strength with adaptable comfort. The calming sage green brings nature indoors.",
     price: 899,
     compareAtPrice: 1199,
@@ -303,8 +309,9 @@ export const products: Product[] = [
     externalImage: "https://ezhomes.co/wp-content/uploads/2025/10/SG3-1-e1760622441290.png",
   },
   {
-    id: "7",
-    title: "Corduroy & Flannel Sofa Maroon Red",
+    id: "6",
+    slug: "oslo-compression-sofa-3-0",
+    title: "Oslo Compression Sofa 3.0",
     description: "Maroon red variant of the Corduroy & Flannel sofa.",
     price: 899,
     compareAtPrice: 1199,
@@ -347,8 +354,9 @@ export const products: Product[] = [
     externalImage: "https://ezhomes.co/wp-content/uploads/2025/09/m5-e1760623007718.jpg",
   },
   {
-    id: "8",
-    title: "Corduroy & Flannel Sofa Light Pink",
+    id: "7",
+    slug: "compression-bed",
+    title: "Compression Bed",
     description: "Light pink variant of the Corduroy & Flannel sofa.",
     price: 899,
     compareAtPrice: 1199,
@@ -386,8 +394,9 @@ export const products: Product[] = [
     externalImage: "https://ezhomes.co/wp-content/uploads/2025/09/Pink-1.jpg",
   },
   {
-    id: "9",
-    title: "Corduroy & Flannel Sofa Light Green",
+    id: "8",
+    slug: "compression-bed-2-0",
+    title: "Compression Bed 2.0",
     description: "Light green variant of the Corduroy & Flannel sofa.",
     price: 899,
     compareAtPrice: 1199,

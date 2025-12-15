@@ -34,3 +34,4 @@ bun.lockb
 *.sln
 *.sw?
 .env.local
+.env*.local

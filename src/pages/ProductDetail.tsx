@@ -13,7 +13,7 @@ import { transformWCProduct } from "@/utils/productTransformer";
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 
 const ProductDetail = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
   
@@ -25,49 +25,40 @@ const ProductDetail = () => {
   const [addonQuantities, setAddonQuantities] = useState<Record<string, number>>({});
   const [isImageSticky, setIsImageSticky] = useState(true);
 
-  // Fetch product from WooCommerce
+  // Fetch product by slug
   useEffect(() => {
     async function loadProduct() {
-      if (!id) {
-        console.error('No product ID provided');
+      if (!slug) {
+        console.error('No product slug provided');
         setLoading(false);
         return;
       }
       
-      console.log('Loading product:', id);
+      console.log('Loading product:', slug);
       
       try {
         setLoading(true);
-        const wcProduct = await fetchProduct(parseInt(id));
-        
-        console.log('WooCommerce API response:', wcProduct ? 'Success' : 'No product found');
-        
-        if (wcProduct) {
-          const transformedProduct = transformWCProduct(wcProduct);
-          console.log('Transformed product:', transformedProduct);
-          console.log('Transformed product title:', transformedProduct.title);
-          console.log('Transformed product images:', transformedProduct.images);
-          setProduct(transformedProduct);
+        // Try to find product by slug in local products
+        let foundProduct = products.find(p => p.slug === slug);
+        if (!foundProduct) {
+          // Optionally, fetch from WooCommerce by slug if needed
+          // const wcProduct = await fetchProductBySlug(slug);
+          // if (wcProduct) foundProduct = transformWCProduct(wcProduct);
+        }
+        if (foundProduct) {
+          setProduct(foundProduct);
         } else {
-          console.warn('Product not found in WooCommerce, using fallback');
-          // Fallback to hardcoded products
-          const fallbackProduct = products.find(p => p.id === id) || products[0];
-          console.log('Using fallback product:', fallbackProduct?.name);
-          setProduct(fallbackProduct);
+          setProduct(products[0]);
         }
       } catch (error) {
         console.error('Failed to load product:', error);
-        // Fallback to hardcoded products
-        const fallbackProduct = products.find(p => p.id === id) || products[0];
-        console.log('Error fallback product:', fallbackProduct?.name);
-        setProduct(fallbackProduct);
+        setProduct(products[0]);
       } finally {
         setLoading(false);
       }
     }
-    
     loadProduct();
-  }, [id]);
+  }, [slug]);
 
   // Update selected size when product changes
   useEffect(() => {
@@ -242,7 +233,10 @@ const ProductDetail = () => {
             {product.colorVariants && product.colorVariants.length > 0 && (
               <div>
                 <p className="text-xs md:text-sm text-muted-foreground mb-2 md:mb-3">
-                  COLOR <span className="text-foreground font-medium">{product.colorVariants.find(v => v.productId === product.id)?.color || product.variants?.[0]?.color || 'Default'}</span>
+                  COLOR <span className="text-foreground font-medium">{product.colorVariants.find(v => {
+                    const variantProduct = products.find(p => p.id === v.productId);
+                    return variantProduct && variantProduct.slug === product.slug;
+                  })?.color || product.variants?.[0]?.color || 'Default'}</span>
                 </p>
                 <div className="flex gap-2 md:gap-3 flex-wrap">
                   {product.colorVariants.map((variant) => (
@@ -250,12 +244,16 @@ const ProductDetail = () => {
                       <TooltipTrigger asChild>
                         <button
                           onClick={() => {
-                            if (variant.productId !== product.id) {
-                              navigate(`/product/${variant.productId}`);
+                            const variantProduct = products.find(p => p.id === variant.productId);
+                            if (variantProduct && variantProduct.slug !== product.slug) {
+                              navigate(`/product/${variantProduct.slug}`);
                             }
                           }}
                           className={`w-14 md:w-16 h-10 md:h-12 rounded-lg border-2 transition-all active:scale-95 ${
-                            variant.productId === product.id
+                            (() => {
+                              const variantProduct = products.find(p => p.id === variant.productId);
+                              return variantProduct && variantProduct.slug === product.slug;
+                            })()
                               ? "border-primary ring-2 ring-primary/20"
                               : "border-border hover:border-muted-foreground cursor-pointer"
                           }`}
@@ -417,7 +415,7 @@ const ProductDetail = () => {
                     if (qty > 0) {
                       // create a lightweight product-like object for addons
                       const addonProduct = {
-                        id: `${product.id}-${addonId}`,
+                        id: `${product.slug}-${addonId}`,
                         title: `${product.title} — ${addonId}`,
                         price: 0,
                         images: [primaryImage],

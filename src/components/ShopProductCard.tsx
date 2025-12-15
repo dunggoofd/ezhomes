@@ -34,7 +34,7 @@ export const ShopProductCard = ({ product }: ShopProductCardProps) => {
 
   return (
     <Link 
-      to={`/product/${displayProduct.id}`}
+      to={`/product/${displayProduct.slug}`}
       className="group cursor-pointer bg-card rounded-lg overflow-hidden border border-border hover:shadow-[var(--shadow-medium)] transition-all duration-300 block"
     >
       {/* Image Container */}
@@ -91,10 +91,14 @@ export const ShopProductCard = ({ product }: ShopProductCardProps) => {
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
-                          setPreviewColorId(variant.productId);
+                          const variantProduct = products.find(p => p.id === variant.productId);
+                          if (variantProduct) setPreviewColorId(variantProduct.slug);
                         }}
                         className={`w-5 h-5 rounded-full border-2 transition-all cursor-pointer block ${
-                          previewColorId === variant.productId 
+                          (() => {
+                            const variantProduct = products.find(p => p.id === variant.productId);
+                            return variantProduct && previewColorId === variantProduct.slug;
+                          })()
                             ? 'border-primary ring-2 ring-primary' 
                             : 'border-transparent ring-1 ring-border hover:ring-2 hover:ring-primary'
                         }`}

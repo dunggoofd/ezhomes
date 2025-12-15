@@ -180,7 +180,7 @@ const CheckoutContent = () => {
           country: formData.country,
         },
         line_items: items.map(item => ({
-          product_id: item.id,
+          product_id: Number(item.id),
           quantity: item.quantity,
         })),
       };

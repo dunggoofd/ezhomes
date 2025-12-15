@@ -12,7 +12,7 @@ interface ProductCardProps {
 export const ProductCard = ({ product }: ProductCardProps) => {
   const { addToCart } = useCart();
   const [hoverIndex, setHoverIndex] = useState(0);
-  const [selectedVariantId, setSelectedVariantId] = useState(product.id);
+  const [selectedVariantSlug, setSelectedVariantSlug] = useState(product.slug);
   const [currentImages, setCurrentImages] = useState(product.images.length > 0 ? product.images : [product.externalImage || '']);
   const cycleRef = useRef<number | null>(null);
 
@@ -24,12 +24,12 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   
   // Update images when variant changes
   useEffect(() => {
-    if (selectedVariantId === product.id) {
+    if (selectedVariantSlug === product.slug) {
       // Show current product images
       setCurrentImages(product.images.length > 0 ? product.images : [product.externalImage || '']);
     } else {
       // Find the selected variant product from all products
-      const variantProduct = products.find(p => p.id === selectedVariantId);
+      const variantProduct = products.find(p => p.slug === selectedVariantSlug);
       if (variantProduct) {
         // Use the variant product's images
         setCurrentImages(variantProduct.images.length > 0 ? variantProduct.images : [variantProduct.externalImage || '']);
@@ -39,7 +39,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       }
     }
     setHoverIndex(0); // Reset hover when variant changes
-  }, [selectedVariantId, product]);
+  }, [selectedVariantSlug, product]);
   
   const discount = product.compareAtPrice 
     ? Math.round((1 - product.price / product.compareAtPrice) * 100)
@@ -67,7 +67,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           src={currentImages[hoverIndex]}
           alt={product.title}
           className="w-full h-full object-cover transition-all duration-500"
-          key={selectedVariantId} // Force re-render on variant change
+          key={selectedVariantSlug} // Force re-render on variant change
         />
         
         {/* Badges */}
@@ -98,7 +98,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         )}
 
         {/* Shop Now Button - Shows on hover */}
-        <Link to={`/product/${selectedVariantId}`} className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+        <Link to={`/product/${product.slug}`} className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
           <span className="block w-full bg-primary text-primary-foreground py-3 font-semibold text-center hover:bg-primary/90 transition-colors rounded">
             Shop Now
           </span>
@@ -115,10 +115,14 @@ export const ProductCard = ({ product }: ProductCardProps) => {
                 key={index}
                 onClick={(e) => {
                   e.stopPropagation();
-                  setSelectedVariantId(variant.productId);
+                  const variantProduct = products.find(p => p.id === variant.productId);
+                  if (variantProduct) setSelectedVariantSlug(variantProduct.slug);
                 }}
                 className={`w-5 h-5 rounded-full border-2 transition-all ${
-                  selectedVariantId === variant.productId 
+                  (() => {
+                    const variantProduct = products.find(p => p.id === variant.productId);
+                    return variantProduct && selectedVariantSlug === variantProduct.slug;
+                  })()
                     ? 'border-primary ring-2 ring-primary/30' 
                     : 'border-transparent hover:border-primary'
                 }`}
@@ -133,7 +137,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         )}
 
         {/* Title */}
-        <Link to={`/product/${selectedVariantId}`}>
+        <Link to={`/product/${product.slug}`}>
           <h3 className="text-base md:text-lg font-semibold text-primary mb-1.5 md:mb-2 group-hover:text-accent transition-colors line-clamp-2 leading-snug">
             {product.title}
           </h3>

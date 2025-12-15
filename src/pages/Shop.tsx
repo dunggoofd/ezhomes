@@ -112,7 +112,7 @@ export default function Shop() {
                 }
                 
                 return filtered.map((product) => (
-                  <ShopProductCard key={product.id} product={product} />
+                  <ShopProductCard key={product.slug} product={product} />
                 ));
               })()
             )}
