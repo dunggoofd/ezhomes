@@ -6,7 +6,10 @@ import type { Product } from '@/data/products';
  */
 export function transformWCProduct(wcProduct: WCProduct): Product {
   // Force HTTP for WordPress images due to SSL issues
-  const fixImageUrl = (url: string) => url.replace('https://wp.ezhomes.co', 'http://wp.ezhomes.co');
+  const fixImageUrl = (url: string) => {
+    if (!url) return '';
+    return url.replace('https://wp.ezhomes.co', 'http://wp.ezhomes.co');
+  };
   
   return {
     id: wcProduct.id.toString(),
