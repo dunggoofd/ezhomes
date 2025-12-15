@@ -36,20 +36,18 @@ export const Footer = () => {
     ],
     support: [
       { name: 'How It Works', href: '/how-it-works' },
-      { name: 'Delivery', href: '/delivery' },
       { name: 'Assembly Guide', href: '/assembly' },
       { name: 'FAQ', href: '/faq' },
     ],
     company: [
-      { name: 'About Us', href: '/about' },
+      { name: 'About Us', href: '/AboutUs' },
       { name: 'Reviews', href: '/reviews' },
-      { name: 'Contact', href: '/contact' },
-      { name: 'Careers', href: '/careers' },
+      { name: 'Contact', href: '/Contact' },
     ],
     legal: [
-      { name: 'Privacy Policy', href: '/privacy' },
-      { name: 'Terms of Service', href: '/terms' },
-      { name: 'Returns & Warranty', href: '/returns' },
+      { name: 'Privacy Policy', href: '/PrivacyPolicy' },
+      { name: 'Terms of Service', href: '/TermsOfService' },
+      { name: 'Returns & Warranty', href: '/ReturnsWarranty' },
     ]
   };
 
@@ -198,14 +196,8 @@ export const Footer = () => {
 
             {/* Social Links */}
             <div className="flex items-center gap-6">
-              <a href="#" className="text-primary-foreground/60 hover:text-accent transition-colors">
-                <Facebook className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-primary-foreground/60 hover:text-accent transition-colors">
+              <a href="https://www.instagram.com/ezhomes.co/" target="_blank" rel="noopener noreferrer" className="text-primary-foreground/60 hover:text-accent transition-colors">
                 <Instagram className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-primary-foreground/60 hover:text-accent transition-colors">
-                <Youtube className="h-5 w-5" />
               </a>
             </div>
 
