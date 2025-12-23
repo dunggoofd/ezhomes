@@ -190,12 +190,12 @@ const ProductDetail = () => {
                     {discount}% OFF
                   </span>
                 )}
-                <div className="w-full aspect-[16/9] bg-muted flex items-center justify-center">
+                <div className="w-full aspect-[16/7] bg-muted rounded-2xl overflow-hidden flex items-center justify-center" style={{ minHeight: 480, maxHeight: 600 }}>
                   <img
                     src={galleryImages[selectedImage]}
                     alt={product.title}
                     className="w-full h-full object-cover"
-                    style={{ display: 'block' }}
+                    style={{ display: 'block', maxHeight: 600 }}
                     onError={e => { e.currentTarget.src = 'https://placehold.co/600x800?text=No+Image'; }}
                   />
                 </div>
