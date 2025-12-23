@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-// Using HTTP temporarily due to SSL certificate issues on subdomain
-const WC_API_URL = 'http://wp.ezhomes.co/wp-json/wc/v3';
+// Use HTTPS to avoid redirect and ensure secure connection
+const WC_API_URL = 'https://wp.ezhomes.co/wp-json/wc/v3';
 const WC_CONSUMER_KEY = 'ck_0d2b6e1c0b9a5e79312caacda2af076c39f4cf6c';
 const WC_CONSUMER_SECRET = 'cs_74058fa8c3f325fa02d7f3196b2f55542668dd51';
 
