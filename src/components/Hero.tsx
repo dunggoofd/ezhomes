@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Play, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import heroImage from '@/assets/hero-sofa.jpg';
+
 
 export const Hero = () => {
   const scrollToProducts = () => {
@@ -13,7 +13,7 @@ export const Hero = () => {
       {/* Background Video/Image */}
       <div className="absolute inset-0 z-0">
         <img
-          src={heroImage}
+          src="https://wp.ezhomes.co/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-08-at-19.55.42_b91555ad.jpg"
           alt="ezhomes modular furniture in modern living space"
           className="w-full h-full object-cover md:object-contain"
         />
