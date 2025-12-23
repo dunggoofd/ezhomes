@@ -48,11 +48,31 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       body: body ? JSON.stringify(body) : undefined,
     });
 
-    const data = await response.json();
+    let data;
+    try {
+      data = await response.json();
+    } catch (jsonErr) {
+      console.error('Failed to parse WooCommerce response as JSON:', jsonErr);
+      return res.status(response.status).json({
+        error: 'Invalid JSON from WooCommerce',
+        status: response.status,
+        message: jsonErr instanceof Error ? jsonErr.message : jsonErr,
+      });
+    }
 
     if (!response.ok) {
       console.error('WooCommerce API error:', response.status, data);
-      return res.status(response.status).json(data);
+      return res.status(response.status).json({
+        error: 'WooCommerce API error',
+        status: response.status,
+        message: data && data.message ? data.message : data,
+        request: {
+          endpoint,
+          method,
+          body,
+        },
+        raw: data,
+      });
     }
 
     return res.status(200).json(data);
