@@ -161,17 +161,17 @@ const ProductDetail = () => {
             isImageSticky ? 'lg:sticky lg:top-20 lg:max-h-screen' : ''
           }`}>
             {/* Thumbnails - horizontal on mobile, vertical on desktop */}
-              <div className="flex md:flex-col gap-2 md:gap-3 md:w-20 shrink-0 overflow-x-auto md:overflow-y-auto md:max-h-[70vh] pb-2 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0">
+              <div className="flex md:flex-col gap-3 md:gap-4 md:w-28 shrink-0 overflow-x-auto md:overflow-y-auto md:max-h-[70vh] pb-2 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0">
                 {galleryImages.map((img, idx) => (
                   <button
                     key={idx}
                     onClick={() => setSelectedImage(idx)}
-                    className={`relative rounded-lg overflow-hidden border-2 transition-all shrink-0 active:scale-95 ${
+                    className={`relative rounded-xl overflow-hidden border-2 transition-all shrink-0 active:scale-95 ${
                       selectedImage === idx 
                         ? "border-primary ring-2 ring-primary/20" 
                         : "border-border hover:border-muted-foreground"
                     }`}
-                    style={{ width: 64, height: 64, minWidth: 64 }}
+                    style={{ width: 96, height: 96, minWidth: 96 }}
                   >
                     <img 
                       src={img} 
