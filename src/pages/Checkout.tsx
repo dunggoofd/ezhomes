@@ -211,31 +211,46 @@ const CheckoutContent = () => {
         throw new Error("Failed to create order. Please try again or contact support.");
       }
 
-      console.log("WooCommerce order created:", order.id);
+      // Improved logging and ID extraction
+      console.log("WooCommerce order created:", order);
+      let orderId = undefined;
+      if (order && order.id) {
+        orderId = order.id;
+        console.log("Order ID:", orderId);
+      } else if (Array.isArray(order) && order[0] && order[0].id) {
+        orderId = order[0].id;
+        console.log("Order ID (array):", orderId);
+      } else {
+        console.warn("Order response did not contain an ID:", order);
+      }
+
+      if (!orderId) {
+        throw new Error("Order was created but no order ID was returned. Check API response.");
+      }
 
       // For pickup orders, order is complete (pay on pickup)
       if (formData.deliveryMethod === "pickup") {
-        setCompletedOrderId(order.id);
+        setCompletedOrderId(orderId);
         setOrderComplete(true);
         clearCart();
-        toast.success(`Order #${order.id} placed successfully!`);
+        toast.success(`Order #${orderId} placed successfully!`);
         setLoading(false);
         return;
       }
 
       // For bank transfer, show instructions
       if (paymentMethod === "bank_transfer") {
-        setCompletedOrderId(order.id);
+        setCompletedOrderId(orderId);
         setOrderComplete(true);
         clearCart();
-        toast.success(`Order #${order.id} created! Please complete bank transfer.`);
+        toast.success(`Order #${orderId} created! Please complete bank transfer.`);
         setLoading(false);
         return;
       }
 
       // For card payments, continue with Stripe (to be implemented with real Stripe keys)
       toast.success("Order created! Card payment coming soon...");
-      setCompletedOrderId(order.id);
+      setCompletedOrderId(orderId);
       setOrderComplete(true);
       clearCart();
       setLoading(false);
