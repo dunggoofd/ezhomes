@@ -194,7 +194,7 @@ const ProductDetail = () => {
                   <img
                     src={galleryImages[selectedImage]}
                     alt={product.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                     style={{ display: 'block', maxHeight: 600 }}
                     onError={e => { e.currentTarget.src = 'https://placehold.co/600x800?text=No+Image'; }}
                   />
