@@ -190,13 +190,15 @@ const ProductDetail = () => {
                     {discount}% OFF
                   </span>
                 )}
-                <img
-                  src={galleryImages[selectedImage]}
-                  alt={product.title}
-                  className="w-full h-[60vh] md:h-[70vh] lg:h-[85vh] object-cover"
-                  style={{ display: 'block' }}
-                  onError={e => { e.currentTarget.src = 'https://placehold.co/600x800?text=No+Image'; }}
-                />
+                <div className="w-full aspect-[4/3] bg-muted flex items-center justify-center">
+                  <img
+                    src={galleryImages[selectedImage]}
+                    alt={product.title}
+                    className="w-full h-full object-contain"
+                    style={{ display: 'block' }}
+                    onError={e => { e.currentTarget.src = 'https://placehold.co/600x800?text=No+Image'; }}
+                  />
+                </div>
                 <button className="absolute bottom-3 md:bottom-4 right-3 md:right-4 p-2.5 md:p-3 bg-background/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-background transition-colors active:scale-95">
                   <ZoomIn className="w-5 h-5" />
                 </button>
