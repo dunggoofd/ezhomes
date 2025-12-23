@@ -1,0 +1,97 @@
+import { useState, useEffect } from 'react';
+import { ProductCard } from './ProductCard';
+import { fetchProducts } from '@/services/woocommerce';
+import { transformWCProduct } from '@/utils/productTransformer';
+import { products as fallbackProducts } from '@/data/products';
+import type { Product } from '@/data/products';
+
+export const ProductGrid = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadProducts() {
+      try {
+        const wcProducts = await fetchProducts();
+        
+        // Use WooCommerce products if available, otherwise use fallback
+        if (wcProducts && wcProducts.length > 0) {
+          const transformedProducts = wcProducts.map(transformWCProduct);
+          // Filter to show only sofas (products with "sofa" or "corduroy" or "flannel" in name)
+          const sofaProducts = transformedProducts.filter(p => 
+            p.title.toLowerCase().includes('sofa') || 
+            p.title.toLowerCase().includes('corduroy') || 
+            p.title.toLowerCase().includes('flannel')
+          );
+          setProducts(sofaProducts.length > 0 ? sofaProducts : transformedProducts);
+        } else {
+          console.log('No WooCommerce products found, using fallback products');
+          setProducts(fallbackProducts);
+        }
+      } catch (err) {
+        console.error('Failed to load products:', err);
+        console.log('Using fallback products due to error');
+        setProducts(fallbackProducts);
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    loadProducts();
+  }, []);
+
+  return (
+    <section id="products" className="py-16 md:py-24 lg:py-32 bg-background overflow-hidden">
+      <div className="container mx-auto px-6 sm:px-8 lg:px-12 max-w-7xl">
+        {/* Section Header */}
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-12 md:mb-16">
+          <div>
+            <p className="text-sm font-semibold text-accent tracking-widest uppercase mb-4">
+              Our Collection
+            </p>
+            <h2 className="text-4xl md:text-5xl font-bold text-primary">
+              Space-Saving Furniture
+            </h2>
+          </div>
+          <a 
+            href="/shop" 
+            className="mt-6 md:mt-0 inline-flex items-center text-primary font-semibold hover:text-accent transition-colors group"
+          >
+            View All Products 
+            <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+          </a>
+        </div>
+
+        {/* Products Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
+          {loading ? (
+            // Loading skeleton
+            Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="animate-pulse">
+                <div className="bg-muted rounded-lg h-64 mb-4"></div>
+                <div className="h-4 bg-muted rounded w-3/4 mb-2"></div>
+                <div className="h-4 bg-muted rounded w-1/2"></div>
+              </div>
+            ))
+          ) : (
+            products.slice(0, 6).map((product) => (
+              <ProductCard key={product.slug} product={product} />
+            ))
+          )}
+        </div>
+
+        {/* Bottom CTA */}
+        <div className="text-center mt-20">
+          <div className="inline-flex flex-col sm:flex-row gap-4">
+            <a href="/shop" className="btn-primary px-10 py-4 text-base">
+              Shop All Furniture
+            </a>
+            <a href="/how-it-works" className="btn-ghost px-10 py-4 text-base">
+              See How It Works
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};

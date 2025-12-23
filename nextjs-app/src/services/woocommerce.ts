@@ -31,9 +31,9 @@ const API_PROXY = '/api/woocommerce';
 const WC_API_URL = 'http://wp.ezhomes.co/wp-json/wc/v3';
 
 // Development fallback - only use direct API in development
-const isDevelopment = import.meta.env.DEV;
-const WC_CONSUMER_KEY = import.meta.env.WC_CONSUMER_KEY || '';
-const WC_CONSUMER_SECRET = import.meta.env.WC_CONSUMER_SECRET || '';
+const isDevelopment = process.env.NODE_ENV === 'development';
+const WC_CONSUMER_KEY = process.env.NEXT_PUBLIC_WC_CONSUMER_KEY || '';
+const WC_CONSUMER_SECRET = process.env.NEXT_PUBLIC_WC_CONSUMER_SECRET || '';
 
 // Helper for dev mode direct API calls
 function addAuthParams(url: string): string {
@@ -205,7 +205,9 @@ export interface WCOrder {
 export async function createOrder(orderData: WCOrderData): Promise<WCOrder | null> {
   try {
     console.log(isDevelopment ? 'Creating order (dev mode)' : 'Creating order via secure proxy');
+    
     let response;
+    
     if (isDevelopment) {
       // Direct API call in development
       response = await fetch(addAuthParams(`${WC_API_URL}/orders`), {
@@ -226,28 +228,19 @@ export async function createOrder(orderData: WCOrderData): Promise<WCOrder | nul
       });
     }
 
-    // Log the full response for debugging
-    const text = await response.text();
-    let data;
-    try {
-      data = JSON.parse(text);
-    } catch (e) {
-      data = text;
-    }
     if (!response.ok) {
+      const error = await response.json();
       console.error('Order creation failed:', {
         status: response.status,
         statusText: response.statusText,
-        error: data
+        error: error
       });
-      alert('Order creation failed: ' + (data && data.message ? data.message : response.statusText));
-      throw new Error((data && data.message) || `Failed to create order: ${response.statusText}`);
+      throw new Error(error.message || `Failed to create order: ${response.statusText}`);
     }
-    console.log('Order created successfully:', data);
-    return data;
+
+    return await response.json();
   } catch (error) {
     console.error('Error creating order:', error);
-    alert('Network or code error: ' + (error && error.message ? error.message : error));
     throw error;
   }
 }
