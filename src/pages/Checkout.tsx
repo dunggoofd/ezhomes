@@ -28,7 +28,7 @@ const CheckoutContent = () => {
   const [completedOrderId, setCompletedOrderId] = useState<number | null>(null);
   const [paymentError, setPaymentError] = useState("");
   const [clientSecret, setClientSecret] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState<"card" | "apple_pay" | "google_pay" | "bank_transfer">("card");
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "apple_pay" | "google_pay" | "bank_transfer" | "paypal">("card");
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -129,14 +129,31 @@ const CheckoutContent = () => {
       // Determine payment method based on delivery and payment selection
       let wcPaymentMethod = "woopayments";
       let wcPaymentTitle = "Card Payment";
-      
+
       if (formData.deliveryMethod === "pickup") {
         wcPaymentMethod = "cod";
         wcPaymentTitle = "Pay on Pickup";
       } else if (paymentMethod === "bank_transfer") {
         wcPaymentMethod = "bacs";
         wcPaymentTitle = "Direct Bank Transfer";
+      } else if (paymentMethod === "paypal") {
+        wcPaymentMethod = "paypal";
+        wcPaymentTitle = "PayPal";
       }
+  // Payment method selection UI (add PayPal option)
+  // Place this in your form where payment methods are selected
+  // Example:
+  // <div style={{ marginBottom: '1rem' }}>
+  //   <label style={{ marginRight: '1rem' }}>
+  //     <input type="radio" name="paymentMethod" value="card" checked={paymentMethod === "card"} onChange={() => setPaymentMethod("card")} /> Card
+  //   </label>
+  //   <label style={{ marginRight: '1rem' }}>
+  //     <input type="radio" name="paymentMethod" value="paypal" checked={paymentMethod === "paypal"} onChange={() => setPaymentMethod("paypal")} /> PayPal
+  //   </label>
+  //   <label style={{ marginRight: '1rem' }}>
+  //     <input type="radio" name="paymentMethod" value="bank_transfer" checked={paymentMethod === "bank_transfer"} onChange={() => setPaymentMethod("bank_transfer")} /> Bank Transfer
+  //   </label>
+  // </div>
 
       // Prepare WooCommerce order data
       const orderData: WCOrderData = {
@@ -283,7 +300,8 @@ const CheckoutContent = () => {
   if (orderComplete) {
     const isPickup = formData.deliveryMethod === "pickup";
     const isBankTransfer = paymentMethod === "bank_transfer";
-    
+    const isPayPal = paymentMethod === "paypal";
+
     return (
       <Layout>
         <div className="container mx-auto px-4 py-12 md:py-16">
@@ -298,7 +316,13 @@ const CheckoutContent = () => {
               <div>
                 <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-2">Order Confirmed!</h1>
                 <p className="text-lg md:text-xl text-muted-foreground">
-                  {isPickup ? "Your order is ready for pickup" : "Thank you for your order"}
+                  {isPickup
+                    ? "Your order is ready for pickup"
+                    : isPayPal
+                      ? "Your order was placed with PayPal. Please complete your payment in your PayPal account."
+                      : isBankTransfer
+                        ? "Your order was placed. Please complete your bank transfer."
+                        : "Thank you for your order"}
                 </p>
               </div>
             </div>
