@@ -15,7 +15,7 @@ export const Hero = () => {
         <img
           src="https://wp.ezhomes.co/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-08-at-19.55.42_b91555ad.jpg"
           alt="ezhomes modular furniture in modern living space"
-          className="w-full h-full object-cover md:object-contain"
+          className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent md:from-black/70 md:via-black/40"></div>
       </div>
