@@ -154,14 +154,14 @@ const ProductDetail = () => {
         </Link>
       </div>
 
-      <main className="container mx-auto px-6 sm:px-8 lg:px-12 pb-16">
+      <main className="container mx-auto px-2 sm:px-4 lg:px-6 pb-8">
         <div className="grid gap-6 md:gap-8 lg:gap-12 lg:grid-cols-[3fr_1fr] items-start lg:items-stretch">
           {/* Left: Image Gallery (larger) */}
           <div className={`flex flex-col md:flex-row gap-3 md:gap-4 ${
             isImageSticky ? 'lg:sticky lg:top-20 lg:max-h-screen' : ''
           }`}>
             {/* Thumbnails - horizontal on mobile, vertical on desktop */}
-              <div className="flex md:flex-col gap-3 md:gap-4 md:w-28 shrink-0 overflow-x-auto md:overflow-y-auto md:max-h-[70vh] pb-2 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0">
+              <div className="flex md:flex-col gap-2 md:gap-3 md:w-24 shrink-0 overflow-x-auto md:overflow-y-auto md:max-h-[70vh] pb-1 md:pb-0 -mx-2 px-2 md:mx-0 md:px-0">
                 {galleryImages.map((img, idx) => (
                   <button
                     key={idx}
@@ -190,7 +190,7 @@ const ProductDetail = () => {
                     {discount}% OFF
                   </span>
                 )}
-                <div className="w-full aspect-[16/7] bg-muted rounded-2xl overflow-hidden flex items-center justify-center" style={{ minHeight: 480, maxHeight: 600 }}>
+                <div className="w-full aspect-[16/7] bg-muted rounded-2xl overflow-hidden flex items-center justify-center" style={{ minHeight: 360, maxHeight: 420 }}>
                   <img
                     src={galleryImages[selectedImage]}
                     alt={product.title}
