@@ -190,7 +190,7 @@ const ProductDetail = () => {
                     {discount}% OFF
                   </span>
                 )}
-                <div className="w-full aspect-[16/7] bg-muted rounded-2xl overflow-hidden flex items-center justify-center" style={{ minHeight: 240, maxHeight: 320 }}>
+                <div className="w-full aspect-[4/3] bg-muted rounded-2xl overflow-hidden flex items-center justify-center">
                   <img
                     src={galleryImages[selectedImage]}
                     alt={product.title}
