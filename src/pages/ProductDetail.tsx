@@ -190,7 +190,7 @@ const ProductDetail = () => {
                     {discount}% OFF
                   </span>
                 )}
-                <div className="w-full aspect-[16/7] bg-muted rounded-2xl overflow-hidden flex items-center justify-center" style={{ minHeight: 360, maxHeight: 420 }}>
+                <div className="w-full aspect-[16/7] bg-muted rounded-2xl overflow-hidden flex items-center justify-center" style={{ minHeight: 240, maxHeight: 320 }}>
                   <img
                     src={galleryImages[selectedImage]}
                     alt={product.title}
@@ -206,7 +206,7 @@ const ProductDetail = () => {
           </div>
 
             {/* Right: Product Info (narrower/tighter) */}
-            <div className="space-y-5 md:space-y-6 w-full lg:max-w-[420px] lg:pl-6">
+            <div className="space-y-5 md:space-y-6 w-full lg:max-w-[420px] lg:pl-2">
             {/* Title & Rating */}
             <div>
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-2 md:mb-3">
