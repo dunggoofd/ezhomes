@@ -54,7 +54,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     <div className="group cursor-pointer block active:scale-[0.98] transition-transform">{/* Removed Link wrapper */}
       {/* Image Container */}
       <div
-        className="relative aspect-[4/3] md:aspect-[4/3] bg-muted mb-4 md:mb-6 overflow-hidden rounded-lg md:rounded-none"
+        className="relative aspect-[1/1] md:aspect-[1/1] bg-muted mb-2 md:mb-3 overflow-hidden rounded-lg md:rounded-none"
         onMouseEnter={() => {
           if (images.length > 1) {
             setHoverIndex(1);
