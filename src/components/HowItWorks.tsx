@@ -37,8 +37,7 @@ export const HowItWorks = () => {
               From Sofa to Bed
             </h2>
             <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-              Seamlessly switch from day to night, with the sofa that transforms into a queen-size bed. 
-              Complete with hidden storage and a one-pull mechanism so comfort never compromises style.
+              Designed to move with you. Lightweight modular pieces rearrange effortlessly—from sofa to lounge to full sleep setup—so your space adapts as easily as your day.
             </p>
             <a 
               href="/shop" 
