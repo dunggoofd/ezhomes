@@ -160,12 +160,15 @@ const ProductDetail = () => {
 
           <div className={`flex flex-col md:flex-row gap-3 md:gap-4 ${
             (product.category?.toLowerCase().includes('compression bed') || product.title?.toLowerCase().includes('compression bed'))
-              ? 'md:gap-8 lg:gap-12' : ''
+              ? 'md:gap-10' : ''
           } ${
             isImageSticky ? 'lg:sticky lg:top-20 lg:max-h-screen' : ''
           }`}>
             {/* Thumbnails - horizontal on mobile, vertical on desktop */}
-              <div className="flex md:flex-col gap-2 md:gap-3 md:w-24 shrink-0 overflow-x-hidden md:overflow-y-auto md:max-h-[420px] pb-1 md:pb-0">
+              <div className={`flex md:flex-col gap-2 md:gap-3 ${
+                (product.category?.toLowerCase().includes('compression bed') || product.title?.toLowerCase().includes('compression bed'))
+                  ? 'md:w-32' : 'md:w-24'
+              } shrink-0 overflow-x-hidden md:overflow-y-auto md:max-h-[420px] pb-1 md:pb-0`}>
                 {galleryImages.map((img, idx) => (
                   <button
                     key={idx}
