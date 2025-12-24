@@ -162,7 +162,7 @@ const ProductDetail = () => {
             isImageSticky ? 'lg:sticky lg:top-20 lg:max-h-screen' : ''
           }`}>
             {/* Thumbnails - horizontal on mobile, vertical on desktop */}
-              <div className="flex md:flex-col gap-2 md:gap-3 md:w-24 shrink-0 overflow-x-auto md:overflow-y-auto md:max-h-[70vh] pb-1 md:pb-0 -mx-2 px-2 md:mx-0 md:px-0">
+              <div className="flex md:flex-col gap-2 md:gap-3 md:w-24 shrink-0 overflow-x-hidden md:overflow-y-auto md:max-h-[420px] pb-1 md:pb-0 md:mx-0 md:px-0">
                 {galleryImages.map((img, idx) => (
                   <button
                     key={idx}
