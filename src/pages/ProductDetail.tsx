@@ -209,7 +209,7 @@ const ProductDetail = () => {
             <div className="space-y-5 md:space-y-6 w-full lg:max-w-[420px] lg:pl-6">
             {/* Title & Rating */}
             <div>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-2 md:mb-3">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-2 md:mb-3 truncate whitespace-nowrap overflow-hidden">
                 {product.title}
               </h1>
               <div className="flex items-center gap-2 flex-wrap">
