@@ -158,52 +158,52 @@ const ProductDetail = () => {
         <div className="grid gap-6 md:gap-8 lg:gap-12 lg:grid-cols-[3fr_1fr] items-start lg:items-stretch">
           {/* Left: Image Gallery (larger) */}
 
-          <div className="flex flex-row gap-8 items-center justify-center">
-            {/* Gallery Thumbnails - vertical, spaced, rounded, highlight selected, play icon for videos */}
-            <div className="flex flex-col gap-4 w-24 shrink-0 bg-[#f7f7f5] py-2 rounded-2xl items-center">
-              {galleryImages.map((img, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setSelectedImage(idx)}
-                  className={`relative rounded-lg overflow-hidden border-2 transition-all shrink-0 active:scale-95 ${selectedImage === idx ? "border-primary ring-2 ring-primary/20" : "border-border hover:border-muted-foreground"}`}
-                  style={{ width: 80, height: 80, minWidth: 80, background: '#fff' }}
-                >
-                  {/* Play icon overlay for video thumbnails (simple check: if img is a video, overlay icon) */}
-                  {img.endsWith('.mp4') && (
-                    <span className="absolute inset-0 flex items-center justify-center z-10">
-                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="rgba(0,0,0,0.4)"/><polygon points="13,11 23,16 13,21" fill="#fff"/></svg>
-                    </span>
-                  )}
-                  <img 
-                    src={img}
-                    alt=""
-                    className="w-full h-full object-cover"
-                    onError={e => { e.currentTarget.src = 'https://placehold.co/600x800?text=No+Image'; }}
-                  />
-                </button>
-              ))}
-            </div>
+          <div className={`flex flex-col md:flex-row gap-3 md:gap-4 ${
+            isImageSticky ? 'lg:sticky lg:top-20 lg:max-h-screen' : ''
+          }`}>
+            {/* Thumbnails - horizontal on mobile, vertical on desktop */}
+              <div className="flex md:flex-col gap-2 md:gap-3 md:w-24 shrink-0 overflow-x-auto md:overflow-y-auto md:max-h-[70vh] pb-1 md:pb-0 -mx-2 px-2 md:mx-0 md:px-0">
+                {galleryImages.map((img, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setSelectedImage(idx)}
+                    className={`relative rounded-xl overflow-hidden border-2 transition-all shrink-0 active:scale-95 ${
+                      selectedImage === idx 
+                        ? "border-primary ring-2 ring-primary/20" 
+                        : "border-border hover:border-muted-foreground"
+                    }`}
+                    style={{ width: 96, height: 96, minWidth: 96 }}
+                  >
+                    <img 
+                      src={img} 
+                      alt={`${product.title} view ${idx + 1}`}
+                      className="w-full h-full object-cover"
+                      onError={e => { e.currentTarget.src = 'https://placehold.co/600x800?text=No+Image'; }}
+                    />
+                  </button>
+                ))}
+              </div>
 
-            {/* Hero Image - large, centered, rounded, shadow */}
-            <div className="flex-1 flex items-center justify-center">
-              <div className="relative w-full max-w-2xl aspect-[16/9] bg-[#f7f7f5] rounded-2xl shadow-lg overflow-hidden flex items-center justify-center">
+              {/* Main Image */}
+              <div className="relative flex-1 rounded-lg md:rounded-xl overflow-hidden bg-muted flex items-center justify-center">
                 {discount > 0 && (
-                  <span className="absolute top-3 left-3 z-10 bg-primary text-primary-foreground text-xs md:text-sm font-semibold px-3 py-1.5 rounded-full">
+                  <span className="absolute top-3 md:top-4 left-3 md:left-4 z-10 bg-primary text-primary-foreground text-xs md:text-sm font-semibold px-2.5 md:px-3 py-1 md:py-1.5 rounded-full">
                     {discount}% OFF
                   </span>
                 )}
-                <img
-                  src={galleryImages[selectedImage]}
-                  alt={product.title}
-                  className="w-full h-full object-cover"
-                  style={{ display: 'block' }}
-                  onError={e => { e.currentTarget.src = 'https://placehold.co/600x800?text=No+Image'; }}
-                />
-                <button className="absolute bottom-3 right-3 p-3 bg-background/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-background transition-colors active:scale-95">
+                <div className="w-full aspect-square bg-muted rounded-2xl overflow-hidden flex items-center justify-center">
+                  <img
+                    src={galleryImages[selectedImage]}
+                    alt={product.title}
+                    className="w-full h-full object-cover"
+                    style={{ display: 'block', maxHeight: 600 }}
+                    onError={e => { e.currentTarget.src = 'https://placehold.co/600x800?text=No+Image'; }}
+                  />
+                </div>
+                <button className="absolute bottom-3 md:bottom-4 right-3 md:right-4 p-2.5 md:p-3 bg-background/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-background transition-colors active:scale-95">
                   <ZoomIn className="w-5 h-5" />
                 </button>
               </div>
-            </div>
           </div>
 
             {/* Right: Product Info (narrower/tighter) */}
