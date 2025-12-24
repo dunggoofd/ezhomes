@@ -190,7 +190,7 @@ const ProductDetail = () => {
                     {discount}% OFF
                   </span>
                 )}
-                <div className="w-full aspect-[4/3] bg-muted rounded-2xl overflow-hidden flex items-center justify-center">
+                <div className="w-full aspect-square bg-muted rounded-2xl overflow-hidden flex items-center justify-center">
                   <img
                     src={galleryImages[selectedImage]}
                     alt={product.title}
