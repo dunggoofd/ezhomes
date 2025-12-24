@@ -407,7 +407,7 @@ const CheckoutContent = () => {
                         </Button>
                       </a>
                       <a
-                        href="tel:+61433267319"
+                        href="tel:0433267318"
                         className="flex-1"
                       >
                         <Button variant="outline" className="w-full bg-white hover:bg-blue-50 border-blue-300 text-blue-700">
