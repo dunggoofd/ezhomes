@@ -159,6 +159,9 @@ const ProductDetail = () => {
           {/* Left: Image Gallery (larger) */}
 
           <div className={`flex flex-col md:flex-row gap-3 md:gap-4 ${
+            (product.category?.toLowerCase().includes('compression bed') || product.title?.toLowerCase().includes('compression bed'))
+              ? 'md:gap-8 lg:gap-12' : ''
+          } ${
             isImageSticky ? 'lg:sticky lg:top-20 lg:max-h-screen' : ''
           }`}>
             {/* Thumbnails - horizontal on mobile, vertical on desktop */}
