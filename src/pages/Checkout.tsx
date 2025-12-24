@@ -441,15 +441,15 @@ const CheckoutContent = () => {
                       </div>
                       <div>
                         <p className="text-amber-700 font-medium">Account Name:</p>
-                        <p className="text-amber-900">[Your Business Name]</p>
+                        <p className="text-amber-900">Star Chef Equipment PTY LTD</p>
                       </div>
                       <div>
                         <p className="text-amber-700 font-medium">BSB:</p>
-                        <p className="text-amber-900">[Your BOQ BSB]</p>
+                        <p className="text-amber-900">124-005</p>
                       </div>
                       <div>
                         <p className="text-amber-700 font-medium">Account Number:</p>
-                        <p className="text-amber-900">[Your BOQ Account Number]</p>
+                        <p className="text-amber-900">22646239</p>
                       </div>
                     </div>
                     <div className="pt-3 mt-3 border-t border-amber-200">
