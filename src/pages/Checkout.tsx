@@ -28,7 +28,7 @@ const CheckoutContent = () => {
   const [completedOrderId, setCompletedOrderId] = useState<number | null>(null);
   const [paymentError, setPaymentError] = useState("");
   const [clientSecret, setClientSecret] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState<"card" | "apple_pay" | "google_pay" | "bank_transfer" | "paypal">("card");
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "apple_pay" | "google_pay" | "bank_transfer" | "paypal">("bank_transfer");
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -763,114 +763,6 @@ const CheckoutContent = () => {
               <div className="space-y-4">
                 <h2 className="text-xl font-semibold">Payment Method</h2>
                 <Separator />
-
-                {/* Payment Method Selection */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {/* Credit Card */}
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod("card")}
-                    className={`p-4 border-2 rounded-lg transition-all flex flex-col items-center gap-2 ${
-                      paymentMethod === "card"
-                        ? "border-red-600 bg-red-50"
-                        : "border-gray-200 hover:border-gray-300"
-                    }`}
-                  >
-                    <CreditCard className="h-5 w-5" />
-                    <span className="text-xs font-medium text-center">Credit Card</span>
-                  </button>
-
-                  {/* Apple Pay */}
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod("apple_pay")}
-                    className={`p-4 border-2 rounded-lg transition-all flex flex-col items-center gap-2 ${
-                      paymentMethod === "apple_pay"
-                        ? "border-red-600 bg-red-50"
-                        : "border-gray-200 hover:border-gray-300"
-                    }`}
-                  >
-                    <Smartphone className="h-5 w-5" />
-                    <span className="text-xs font-medium text-center">Apple Pay</span>
-                  </button>
-
-                  {/* Google Pay */}
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod("google_pay")}
-                    className={`p-4 border-2 rounded-lg transition-all flex flex-col items-center gap-2 ${
-                      paymentMethod === "google_pay"
-                        ? "border-red-600 bg-red-50"
-                        : "border-gray-200 hover:border-gray-300"
-                    }`}
-                  >
-                    <Smartphone className="h-5 w-5" />
-                    <span className="text-xs font-medium text-center">Google Pay</span>
-                  </button>
-
-                  {/* Bank Transfer */}
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod("bank_transfer")}
-                    className={`p-4 border-2 rounded-lg transition-all flex flex-col items-center gap-2 ${
-                      paymentMethod === "bank_transfer"
-                        ? "border-red-600 bg-red-50"
-                        : "border-gray-200 hover:border-gray-300"
-                    }`}
-                  >
-                    <Landmark className="h-5 w-5" />
-                    <span className="text-xs font-medium text-center">Bank Transfer</span>
-                  </button>
-                </div>
-
-                {/* Credit Card */}
-                {paymentMethod === "card" && (
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Card Details *</label>
-                    <div className="p-4 border rounded-md bg-muted/20">
-                      <CardElement
-                        options={{
-                          style: {
-                            base: {
-                              fontSize: "16px",
-                              color: "#424250",
-                              "::placeholder": {
-                                color: "#aab7c4",
-                              },
-                            },
-                            invalid: {
-                              color: "#fa755a",
-                              iconColor: "#fa755a",
-                            },
-                          },
-                        }}
-                      />
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      Your card information is secure and encrypted. We use Stripe for secure payment processing.
-                    </p>
-                  </div>
-                )}
-
-                {/* Apple Pay Info */}
-                {paymentMethod === "apple_pay" && (
-                  <div className="p-4 border rounded-md bg-blue-50 space-y-3">
-                    <p className="text-sm font-medium">Apple Pay</p>
-                    <p className="text-sm text-muted-foreground">
-                      Fast and secure payments using your Apple Wallet. You'll be prompted to complete the payment on your device.
-                    </p>
-                  </div>
-                )}
-
-                {/* Google Pay Info */}
-                {paymentMethod === "google_pay" && (
-                  <div className="p-4 border rounded-md bg-blue-50 space-y-3">
-                    <p className="text-sm font-medium">Google Pay</p>
-                    <p className="text-sm text-muted-foreground">
-                      Fast and secure payments using your Google Wallet. You'll be prompted to complete the payment on your device.
-                    </p>
-                  </div>
-                )}
 
                 {/* Bank Transfer */}
                 {paymentMethod === "bank_transfer" && (
