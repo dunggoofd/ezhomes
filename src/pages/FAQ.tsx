@@ -56,23 +56,23 @@ const faqCategories = [
   },
   {
     id: "returns",
-    name: "Returns & Warranty",
+    name: "Returns & Refunds",
     faqs: [
       {
         question: "What is your return policy?",
-        answer: "We offer a 30-day risk-free trial. If you're not completely satisfied with your purchase, return it within 30 days for a full refund. The product must be in original condition and packaging."
+        answer: "Due to the vacuum-compressed nature of our sofas, all sales are final once a product has been opened and expanded. We only accept returns or exchanges for items with a manufacturing or factory defect. To be eligible, notify us within 7 days of delivery with clear photos or videos showing the defect."
       },
       {
         question: "How do I initiate a return?",
-        answer: "Contact our customer service team via email at ezhomesinfo@gmail.com or call +61 433 267 318. We'll arrange for pickup and process your refund within 5-7 business days of receiving the returned item."
+        answer: "Contact our customer service team via email at ezhomesinfo@gmail.com or call +61 433 267 318 with your order number and supporting photos or videos. If a manufacturing defect is confirmed, we'll arrange a replacement, or a refund if a replacement isn't available."
       },
       {
-        question: "What does the warranty cover?",
-        answer: "Our 5-year warranty covers manufacturing defects, frame breakage, and foam deterioration under normal use. It does not cover damage from misuse, accidents, or normal wear and tear."
+        question: "What qualifies as a defect?",
+        answer: "A manufacturing or factory defect is a fault in production — such as structural failure of the frame or foam, or damage present on arrival. It does not include change of mind, incorrect size or colour selection, normal wear and tear, misuse, improper assembly, or accidental damage."
       },
       {
-        question: "Can I exchange for a different colour?",
-        answer: "Yes! Exchanges are free within the 30-day trial period. Contact us to arrange the exchange, and we'll send your new colour once we've received the original."
+        question: "Can I return or exchange due to change of mind or wrong colour?",
+        answer: "No. We can't accept returns, refunds, or exchanges for change of mind, for an incorrect size or colour chosen at checkout, or for any product that has been opened and allowed to expand. Returns are only available for items with a confirmed manufacturing defect."
       },
     ]
   },
