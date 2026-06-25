@@ -201,22 +201,48 @@ export interface WCOrder {
   date_created: string;
 }
 
+// Update an order's status via the secure proxy. A real status transition
+// (e.g. pending -> processing/on-hold) is what triggers WooCommerce's native
+// confirmation emails — creating an order directly in that status does not.
+async function updateOrderStatus(orderId: number, status: string): Promise<void> {
+  try {
+    if (isDevelopment) {
+      await fetch(addAuthParams(`${WC_API_URL}/orders/${orderId}`), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+      });
+    } else {
+      await fetch(API_PROXY, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          endpoint: `/orders/${orderId}`,
+          method: 'PUT',
+          body: { status },
+        }),
+      });
+    }
+  } catch (e) {
+    console.error('Failed to update order status:', e);
+  }
+}
+
 // Create order with authentication (via secure proxy)
 export async function createOrder(orderData: WCOrderData): Promise<WCOrder | null> {
   try {
-    // Set the order status on creation so WooCommerce sends its native,
-    // fully-populated confirmation email. Orders left at the default
-    // "pending" status send no email at all.
+    // The order is created at WooCommerce's default "pending" status, then
+    // transitioned below. WooCommerce only sends its native confirmation
+    // email on a pending -> processing/on-hold *transition*, not when an
+    // order is created directly in that status.
     //   - paid (Stripe)        -> processing
     //   - bank transfer (bacs) -> on-hold (awaiting payment; email includes bank details)
     //   - pickup / cash (cod)  -> processing
-    if (!orderData.status) {
-      orderData.status = orderData.set_paid
-        ? 'processing'
-        : orderData.payment_method === 'bacs'
-          ? 'on-hold'
-          : 'processing';
-    }
+    const targetStatus = orderData.set_paid
+      ? 'processing'
+      : orderData.payment_method === 'bacs'
+        ? 'on-hold'
+        : 'processing';
 
     console.log(isDevelopment ? 'Creating order (dev mode)' : 'Creating order via secure proxy');
     let response;
@@ -258,6 +284,13 @@ export async function createOrder(orderData: WCOrderData): Promise<WCOrder | nul
       throw new Error((data && data.message) || `Failed to create order: ${response.statusText}`);
     }
     console.log('Order created successfully:', data);
+
+    // Transition the order so WooCommerce emails the customer (and admin)
+    // with the full order details.
+    if (data && data.id) {
+      await updateOrderStatus(data.id, targetStatus);
+      data.status = targetStatus;
+    }
     return data;
   } catch (error) {
     console.error('Error creating order:', error);
