@@ -2,8 +2,8 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 // Use HTTPS to avoid redirect and ensure secure connection
 const WC_API_URL = 'https://wp.ezhomes.co/wp-json/wc/v3';
-const WC_CONSUMER_KEY = 'ck_0d2b6e1c0b9a5e79312caacda2af076c39f4cf6c';
-const WC_CONSUMER_SECRET = 'cs_74058fa8c3f325fa02d7f3196b2f55542668dd51';
+const WC_CONSUMER_KEY = process.env.WC_CONSUMER_KEY || '';
+const WC_CONSUMER_SECRET = process.env.WC_CONSUMER_SECRET || '';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Enable CORS

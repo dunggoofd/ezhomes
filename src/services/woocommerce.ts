@@ -27,8 +27,7 @@ export async function fetchProductBySlug(slug: string): Promise<WCProduct | null
 // WooCommerce API Service
 // Using serverless function proxy to keep API keys secure
 const API_PROXY = '/api/woocommerce';
-// Using HTTP temporarily due to SSL certificate issues on subdomain
-const WC_API_URL = 'http://wp.ezhomes.co/wp-json/wc/v3';
+const WC_API_URL = 'https://wp.ezhomes.co/wp-json/wc/v3';
 
 // Development fallback - only use direct API in development
 const isDevelopment = import.meta.env.DEV;
@@ -191,6 +190,7 @@ export interface WCOrderData {
     total: string;
   }>;
   customer_note?: string;
+  status?: string;
 }
 
 export interface WCOrder {
@@ -204,6 +204,20 @@ export interface WCOrder {
 // Create order with authentication (via secure proxy)
 export async function createOrder(orderData: WCOrderData): Promise<WCOrder | null> {
   try {
+    // Set the order status on creation so WooCommerce sends its native,
+    // fully-populated confirmation email. Orders left at the default
+    // "pending" status send no email at all.
+    //   - paid (Stripe)        -> processing
+    //   - bank transfer (bacs) -> on-hold (awaiting payment; email includes bank details)
+    //   - pickup / cash (cod)  -> processing
+    if (!orderData.status) {
+      orderData.status = orderData.set_paid
+        ? 'processing'
+        : orderData.payment_method === 'bacs'
+          ? 'on-hold'
+          : 'processing';
+    }
+
     console.log(isDevelopment ? 'Creating order (dev mode)' : 'Creating order via secure proxy');
     let response;
     if (isDevelopment) {
