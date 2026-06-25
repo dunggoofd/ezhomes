@@ -18,7 +18,7 @@
         <div class="announcement-bar">
             <p>
                 <?php
-                $announcement_text = get_theme_mod( 'ezhomes_announcement_text', '<span class="highlight">FREE SHIPPING</span> on all orders over $999 | <span class="highlight">30-DAY</span> Risk-Free Trial' );
+                $announcement_text = get_theme_mod( 'ezhomes_announcement_text', '<span class="highlight">FREE SHIPPING</span> on all orders over $999' );
                 echo wp_kses_post( $announcement_text );
                 ?>
             </p>

@@ -24,8 +24,7 @@ export const Header = () => {
       {/* Announcement Bar */}
       <div className="bg-primary text-primary-foreground py-2.5 text-center text-sm">
         <p className="font-medium tracking-wide">
-          <span className="text-accent font-semibold">FREE SHIPPING</span> on all orders over $999 | 
-          <span className="text-accent font-semibold ml-1">30-DAY</span> Risk-Free Trial
+          <span className="text-accent font-semibold">FREE SHIPPING</span> on all orders over $999
         </p>
       </div>
 

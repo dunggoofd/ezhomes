@@ -132,11 +132,6 @@ export const SEOSchemas = ({ type, data }: SEOSchemasProps) => {
             },
             {
               "@type": "PropertyValue",
-              "name": "Warranty",
-              "value": "10 years frame, 2 years fabric"
-            },
-            {
-              "@type": "PropertyValue",
               "name": "Material",
               "value": "Premium fabric, hardwood frame"
             }
@@ -202,15 +197,7 @@ export const SEOSchemas = ({ type, data }: SEOSchemasProps) => {
               "name": "What's your return policy?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "We offer 30-day returns with full refund. If you're not completely satisfied, contact us for a return authorization. We'll arrange pickup and processing."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "What warranty do you provide?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "10-year warranty on the frame structure, 2-year warranty on fabric and cushions. This covers manufacturing defects and structural integrity under normal use."
+                "text": "Due to the vacuum-compressed nature of our sofas, all sales are final once a product has been opened and expanded. We only accept returns or exchanges for items with a manufacturing or factory defect. Notify us within 7 days of delivery with clear photos or videos of the defect, and we'll replace the item or, if a replacement isn't available, provide a refund."
               }
             }
           ]

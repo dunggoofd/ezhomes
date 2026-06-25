@@ -66,12 +66,12 @@ export const Hero = () => {
               <div className="text-xs md:text-sm">2,000+ Reviews</div>
             </div>
             <div className="text-white/80">
-              <div className="text-xl md:text-2xl font-bold text-white">10 Year</div>
-              <div className="text-xs md:text-sm">Warranty</div>
+              <div className="text-xl md:text-2xl font-bold text-white">10 Min</div>
+              <div className="text-xs md:text-sm">Assembly</div>
             </div>
             <div className="text-white/80">
-              <div className="text-xl md:text-2xl font-bold text-white">30 Day</div>
-              <div className="text-xs md:text-sm">Free Returns</div>
+              <div className="text-xl md:text-2xl font-bold text-white">7 Day</div>
+              <div className="text-xs md:text-sm">Defect Returns</div>
             </div>
             <div className="text-white/80">
               <div className="text-xl md:text-2xl font-bold text-white">Free</div>

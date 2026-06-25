@@ -47,7 +47,7 @@ export const Footer = () => {
     legal: [
       { name: 'Privacy Policy', href: '/PrivacyPolicy' },
       { name: 'Terms of Service', href: '/TermsOfService' },
-      { name: 'Returns & Warranty', href: '/ReturnsWarranty' },
+      { name: 'Return & Refund Policy', href: '/ReturnsWarranty' },
     ]
   };
 

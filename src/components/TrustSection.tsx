@@ -98,8 +98,8 @@ export const TrustSection = () => {
             <div className="text-muted-foreground">Avg Assembly</div>
           </div>
           <div className="text-center">
-            <div className="text-4xl lg:text-5xl font-bold text-primary mb-2">10 Year</div>
-            <div className="text-muted-foreground">Warranty</div>
+            <div className="text-4xl lg:text-5xl font-bold text-primary mb-2">Free</div>
+            <div className="text-muted-foreground">AU Shipping</div>
           </div>
         </div>
       </div>

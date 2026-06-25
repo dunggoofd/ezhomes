@@ -285,21 +285,12 @@ function ezhomes_trust_bar_shortcode( $atts ) {
                 <div class="trust-item">
                     <div class="trust-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                        </svg>
-                    </div>
-                    <h4><?php esc_html_e( '5-Year Warranty', 'ezhomes' ); ?></h4>
-                    <p><?php esc_html_e( 'Full coverage protection', 'ezhomes' ); ?></p>
-                </div>
-                <div class="trust-item">
-                    <div class="trust-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="23 4 23 10 17 10"></polyline>
                             <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
                         </svg>
                     </div>
-                    <h4><?php esc_html_e( '30-Day Returns', 'ezhomes' ); ?></h4>
-                    <p><?php esc_html_e( 'Risk-free trial period', 'ezhomes' ); ?></p>
+                    <h4><?php esc_html_e( 'Defect Returns', 'ezhomes' ); ?></h4>
+                    <p><?php esc_html_e( '7-day defect reporting window', 'ezhomes' ); ?></p>
                 </div>
                 <div class="trust-item">
                     <div class="trust-icon">
@@ -341,7 +332,7 @@ function ezhomes_customize_register( $wp_customize ) {
     ) );
 
     $wp_customize->add_setting( 'ezhomes_announcement_text', array(
-        'default'           => '<span class="highlight">FREE SHIPPING</span> on all orders over $999 | <span class="highlight">30-DAY</span> Risk-Free Trial',
+        'default'           => '<span class="highlight">FREE SHIPPING</span> on all orders over $999',
         'sanitize_callback' => 'wp_kses_post',
     ) );
 

@@ -12,8 +12,8 @@ const sampleFaqs = [
     a: 'Brisbane metro orders typically arrive within 2-3 business days. Other metro areas 3-5 business days.',
   },
   {
-    q: 'Can I return my sofa if it doesn\'t fit?',
-    a: 'Yes — we offer a 30-day risk-free trial and free returns within that period for eligible orders.',
+    q: 'What is your return policy?',
+    a: 'Due to the vacuum-compressed nature of our sofas, all sales are final once a product has been opened and expanded. We only accept returns or exchanges for items with a manufacturing or factory defect — notify us within 7 days of delivery with clear photos or videos of the issue.',
   },
   {
     q: 'Do you offer interest-free payments?',
